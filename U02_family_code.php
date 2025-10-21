@@ -3,6 +3,8 @@
 $errors = [];
 $success_message = '';
 
+$background_image = "url('background.jpg')";
+
 // フォームがPOST送信された場合の処理
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -86,6 +88,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>家族コード発行結果</title>
+    <style>
+        body {
+            /* background-image や background-repeat などをCSSで設定 */
+            background-image: <?php echo $background_image; ?>;
+        }
+    </style>
 </head>
 <body>
     <?php if (!empty($errors)): ?>
