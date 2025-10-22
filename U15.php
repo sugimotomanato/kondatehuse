@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>献立家</h1>
-    <form action="U16" method="post">
+    <form action="U16.php" method="post">
         <label for="">
         管理者ID
         <p><input type="text" name="ID" id=""></p>
