@@ -149,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
             <?php endif; ?>
 
-            <form method="post" action="index.php">
+            <form method="post" action="U02.php">
                 <label for="family_code">家族コードを作成（6文字英数以上）</label>
                 <input type="text" id="family_code" name="family_code" 
                        value="<?php echo htmlspecialchars($code); ?>" 
