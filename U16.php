@@ -30,9 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // 2. 入力チェック
     if (empty($ID)  || !ctype_alnum($ID)) {
         $errors[] = "アカウントが間違っています";
+         header('Location: ./U15.php');
+            exit();
     }
     if (empty($pass) || strlen($name) > 50 || !ctype_alnum($ID)) {
         $errors[] = "アカウントが間違っています";
+         header('Location: ./U15.php');
+            exit();
     }
     
 

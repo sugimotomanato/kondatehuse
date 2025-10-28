@@ -12,6 +12,10 @@ $db_host = 'mysql320.phy.lolipop.lan';
 $db_user = 'LAA1685019-kondatehausu'; // 画像から推測される正しいユーザー名
 $db_pass = '6group'; // 画像のパスワードから推測
 $db_name = 'LAA1685019'; // 画像のDB名から推測
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -35,11 +39,11 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
     <form action="U16.php" method="post">
         <label for="">
             管理者ID
-            <p><input type="text" name="ID" id=""></p>
+            <p><input type="text" name="system_ID" id=""></p>
             </label>
         <label for="">
             パスワード（半角英数8文字以上）
-            <p><input type="password" name="passward" id=""></p> 
+            <p><input type="password" name="system_passward" id=""></p> 
         </label>
         <button type="submit">ログイン</button>
     </form>
