@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          header('Location: ./U15.php');
             exit();
     }
-    if (empty($pass) || strlen($name) > 50 || !ctype_alnum($ID)) {
+    if (empty($pass) || strlen($pass) > 50 || !ctype_alnum($pass)) {
         $errors[] = "アカウントが間違っています";
          header('Location: ./U15.php');
             exit();
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // 管理者ログインのチェック
-            $stmt = $pdo->prepare("SELECT system_users_id, system_users_password  FROM system WHERE system_users_id  = ?, system_users_password	= ?");
+  $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ? AND system_users_password = ?");
             $stmt->execute([$ID, $pass]);
             if ($stmt->fetch()) {
                 
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        } catch (PDOException $e) {
             // SQLエラーや接続エラーが発生した場合
             $errors[] = "データベースエラーが発生しました: " . $e->getMessage();
-            header('Location: ./U15.php');
+            header('Location: U15.php');
             exit();
             // データベース接続情報のエラーを特定しやすいように、デバッグ情報をログに出すことも推奨されます。
         }     
