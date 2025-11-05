@@ -49,7 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // 管理者ログインのチェック
   $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ? AND system_users_password = ?");
-           if ($stmt->fetch()) {
+           $stmt->execute([$ID, $pass]);
+  if ($stmt->fetch()) {
     // ログイン成功 → 完了ページへ
     header('Location: complete.php');
     exit();
