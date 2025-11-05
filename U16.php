@@ -49,12 +49,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // 管理者ログインのチェック
   $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ? AND system_users_password = ?");
-            $stmt->execute([$ID, $pass]);
-            if ($stmt->fetch()) {
-                
-            }else{
-               $errors[] = "このアカウントは間違っています";
-            }
+           if ($stmt->fetch()) {
+    // ログイン成功 → 完了ページへ
+    header('Location: complete.php');
+    exit();
+    } else {
+    // ログイン失敗 → ログイン画面へ戻る
+    $errors[] = "このアカウントは間違っています";
+    header('Location: ./U15.php');
+    exit();
+     }
 
        } catch (PDOException $e) {
             // SQLエラーや接続エラーが発生した場合
