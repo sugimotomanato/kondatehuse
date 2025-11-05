@@ -16,8 +16,9 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // 1. データの受け取り
-    $ID = $_POST['system_ID'] ?? ''; 
-    $pass = $_POST['system_password'] ?? '';
+    $ID = $_POST['system_ID'];
+    $pass = $_POST['system_password'];
+
     
     // NOT NULL制約のある必須項目にダミー値を設定（DB設計に基づく）
     // ★★★ 注意: 実際の運用ではユーザー入力やシステムでの正しい値生成が必要です ★★★
