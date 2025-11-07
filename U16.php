@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
 
-            if ($isValid===true) {
+            if ($isValid) {
                 // ✅ ログイン成功時の処理
                 header('Location: complete.php');
                 exit();
