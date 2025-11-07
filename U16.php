@@ -21,22 +21,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // 管理者を取得
             $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
-$stmt->execute([$ID]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([$ID]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($user && password_verify($pass, $user['system_users_password'])) {
-    // ログイン成功
-} else {
-    // ログイン失敗
-    header('Location: ./U15.php');
-    exit();
-}
+            // ✅ 両方の比較方法を採用
+            $isValid = false;
+            if ($user) {
+                // ハッシュ化されている場合
+                if (password_verify($pass, $user['system_users_password'])) {
+                    $isValid = true;
+                }
+                // 平文保存されている場合
+                elseif ($pass === $user['system_users_password']) {
+                    $isValid = true;
+                }
+            }
+
+            if ($isValid==true) {
+                // ✅ ログイン成功時の処理
+                header('Location: complete.php');
+                exit();
+            } else {
+                // ❌ 失敗時
+                header('Location: ./U15.php');
+                exit();
+            }
+
         } catch (PDOException $e) {
             echo "DB接続エラー: " . $e->getMessage();
         }
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>
