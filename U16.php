@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($errors)) {
         try {
-           $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
+            $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // 管理者を取得
@@ -24,25 +24,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute([$ID]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // ✅ 両方の比較方法を採用
             $isValid = false;
-            if ($user) {
-                // ハッシュ化されている場合
-                if (password_verify($pass, $user['system_users_password'])) {
+
+            if ($user && !empty($user['system_users_password'])) {
+
+                $stored_pass = $user['system_users_password'];
+
+                // ① ハッシュの場合のみ password_verify 実行
+                if (strlen($stored_pass) > 50 && password_verify($pass, $stored_pass)) {
                     $isValid = true;
                 }
-                // 平文保存されている場合
-                elseif ($pass === $user['system_users_password']) {
+                // ② 平文の場合（同一文字列で完全一致したときのみ許可）
+                elseif ($pass === $stored_pass) {
                     $isValid = true;
                 }
             }
 
             if ($isValid) {
-                // ✅ ログイン成功時の処理
                 header('Location: complete.php');
                 exit();
             } else {
-                // ❌ 失敗時
                 header('Location: ./U15.php');
                 exit();
             }
@@ -53,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 
 
