@@ -23,6 +23,6 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
     <title>Document</title>
 </head>
 <body>
-    
+    削除しますか？
 </body>
 </html>
