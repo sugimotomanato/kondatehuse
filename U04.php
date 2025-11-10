@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 // エラーメッセージを初期化
 $errors = [];
@@ -171,3 +172,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
+=======
+>>>>>>> 04801d40ba077c821c46427cd64186129328a1c3
