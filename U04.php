@@ -14,7 +14,7 @@ $db_user = 'LAA1685019-kondatehausu'; //
 $db_pass = '6group'; //
 $db_name = 'LAA1685019'; //
 
-$delete_complete_page = 'delete_complete.php'; 
+$delete_complete_page = 'U05x.php'; 
 
 // フォームがPOST送信された場合の処理
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute([$code]);
                 
                 // 4. 削除成功！完了画面へリダイレクト
-                header("Location: {$delete_complete_page}");
+                header("Location: U05.php");
                 exit; 
             } else {
                 // コードが存在しない場合
