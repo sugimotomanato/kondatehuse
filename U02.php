@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: sans-serif; 
             text-align: center; 
             background-color: #f0f0f0; 
-            background-image: url('background.jpg'); 
+            background-image: url('haikei2.jpg'); 
             background-repeat: repeat;
             background-size: cover; 
             margin: 0;

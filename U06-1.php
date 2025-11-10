@@ -48,7 +48,7 @@
             
             /* 【修正点】ローカル実行用に相対パスに戻しました。*/
             /* HTMLファイルと同じフォルダに haikei.jpg を置いてください。*/
-            background-image: url('haikei1.jpg'); 
+            background-image: url('haikei.jpg'); 
             
             background-size: cover;
             background-position: center;
@@ -171,9 +171,8 @@
                     
                     <!-- 見出しの遷移部分 -->
                     <h2 class="text-xl font-bold text-gray-700">の人気献立
-                        <span id="popular-detail-link" class="text-sm font-normal text-primary-pink ml-2 cursor-pointer hover:underline">
-                            へ移動
-                        </span>
+                        <a href="U09RANKING.php">>
+                    </a>
                     </h2>
                 </div>
 
@@ -234,9 +233,9 @@
             <!-- 2. お気に入り (水平横スクロール) -->
             <section>
                 <h2 class="text-xl font-bold mb-3 text-gray-700">お気に入り
-                    <span id="favorite-detail-link" class="text-sm font-normal text-primary-pink ml-2 cursor-pointer hover:underline">
-                        へ移動
-                    </span>
+                    <a href="U08OKINI.php"><span id="favorite-detail-link" class="text-sm font-normal text-primary-pink ml-2 cursor-pointer hover:underline">
+                        >
+                    </span></a>
                 </h2>
                 <div id="favorite-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     
@@ -299,9 +298,9 @@
             <!-- 3. カレンダー (水平横スクロール) -->
             <section>
                 <h2 class="text-xl font-bold mb-3 text-gray-700">カレンダー
-                    <span id="calendar-detail-link" class="text-sm font-normal text-primary-pink ml-2 cursor-pointer hover:underline">
-                        へ移動
-                    </span>
+                    <a href="U07CARENDER.php"><span id="calendar-detail-link" class="text-sm font-normal text-primary-pink ml-2 cursor-pointer hover:underline">
+                        >
+                    </span></a>
                 </h2>
                 <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     
@@ -348,7 +347,7 @@
                     <div class="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
                     <!-- 登録ボタン (直接 U11TOUROKU.php に遷移する処理を埋め込み) -->
                     <button id="register-button" 
-                            onclick="window.location.href='U11.php'" 
+                            onclick="window.location.href='U11TOUROKU.php'" 
                             class="relative w-10 h-10 bg-primary-pink/90 text-white rounded-full shadow-2xl shadow-primary-pink/50 flex items-center justify-center transition duration-300 transform hover:scale-105 active:scale-95">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -367,9 +366,9 @@
                 <!-- 献立リアクション (水平横スクロール) -->
                 <div id="reaction-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-3 pb-2 justify-start">
                     <!-- 自分のリアクション (アクティブ) -->
-                    <div class="flex-shrink-0 text-center w-16">
+                    <div class="flex-shrink-0 text-center w-16"><a href="U10BYOUKI.php">
                         <button class="reaction-item w-12 h-12 text-3xl p-1 bg-primary-pink/10 border-2 border-primary-pink rounded-full transition duration-150 transform hover:scale-105">
-                            <span id="my-reaction-emoji" role="img" aria-label="自分">😊</span>
+                            <span id="my-reaction-emoji" role="img" aria-label="自分">😊</span></a>
                         </button>
                         <!-- 名前同期 -->
                         <p id="my-reaction-name" class="text-xs font-medium text-primary-pink mt-1">自分</p>
@@ -485,9 +484,9 @@
             // 💡 補足: 検索キーワードをURLパラメータとして渡す場合は以下の形式を使います。
             // const destinationUrl = `U13KENSAKU.php?q=${encodeURIComponent(searchTerm)}`;
             
-            const destinationUrl = "U13.php";
+            const destinationUrl = "U13KENSAKU.php";
             
-            console.log(`U13.phpへ遷移を開始します... (検索語: ${searchTerm})`);
+            console.log(`U13KENSAKU.phpへ遷移を開始します... (検索語: ${searchTerm})`);
             
             // 3. 画面遷移を実行
             window.location.href = destinationUrl;
@@ -553,7 +552,7 @@
 
                 <!-- メニューリスト -->
                 <nav class="space-y-6 text-gray-700 text-lg font-semibold">
-                    <a href="U14.php">買い物リスト
+                    <a href="U14LIST.php">買い物リスト
                     </a>
                     <a href="#" class="block hover:text-primary-pink transition duration-150" onclick="showMessageBox('グループ削除画面へ遷移します。'); closeDrawer(); return false;">
                         グループ削除

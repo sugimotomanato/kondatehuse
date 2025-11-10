@@ -12,7 +12,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-pink': '#000000', 
+                        'primary-pink': '#ff1493', 
                         'secondary-gray': '#D1D5DB', 
                         'accent-yellow': '#FFD700', 
                         'light-bg': '#F9FAFB', 
@@ -48,7 +48,7 @@
             
             /* 【修正点】ローカル実行用に相対パスに戻しました。*/
             /* HTMLファイルと同じフォルダに haikei.jpg を置いてください。*/
-            background-image: url('haikei1.jpg'); 
+            background-image: url('haikei.jpg'); 
             
             background-size: cover;
             background-position: center;
@@ -348,7 +348,7 @@
                     <div class="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
                     <!-- 登録ボタン (直接 U11TOUROKU.php に遷移する処理を埋め込み) -->
                     <button id="register-button" 
-                            onclick="window.location.href='U11.php'" 
+                            onclick="window.location.href='U11TOUROKU.php'" 
                             class="relative w-10 h-10 bg-primary-pink/90 text-white rounded-full shadow-2xl shadow-primary-pink/50 flex items-center justify-center transition duration-300 transform hover:scale-105 active:scale-95">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -485,9 +485,9 @@
             // 💡 補足: 検索キーワードをURLパラメータとして渡す場合は以下の形式を使います。
             // const destinationUrl = `U13KENSAKU.php?q=${encodeURIComponent(searchTerm)}`;
             
-            const destinationUrl = "U13.php";
+            const destinationUrl = "U13KENSAKU.php";
             
-            console.log(`U13.phpへ遷移を開始します... (検索語: ${searchTerm})`);
+            console.log(`U13KENSAKU.phpへ遷移を開始します... (検索語: ${searchTerm})`);
             
             // 3. 画面遷移を実行
             window.location.href = destinationUrl;
@@ -553,7 +553,7 @@
 
                 <!-- メニューリスト -->
                 <nav class="space-y-6 text-gray-700 text-lg font-semibold">
-                    <a href="U14.php">買い物リスト
+                    <a href="U14LIST.php">買い物リスト
                     </a>
                     <a href="#" class="block hover:text-primary-pink transition duration-150" onclick="showMessageBox('グループ削除画面へ遷移します。'); closeDrawer(); return false;">
                         グループ削除
