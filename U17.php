@@ -25,7 +25,6 @@ $stmt = $pdo->prepare("SELECT parent_account_ID, parent_account, user_name FROM 
 
     // 結果を配列で取得
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-var_dump($results);
         } catch (PDOException $e) {
             echo "DB接続エラー: " . $e->getMessage();
         }
@@ -52,6 +51,13 @@ var_dump($results);
     th {
         background-color: #f2f2f2;
     }
+        body {
+          background-image: url('images/haikei2.jpg');
+          background-size: cover;      /* 画面全体にフィット */
+          background-position: center; /* 中央に配置 */
+          background-repeat: no-repeat;/* 繰り返さない */
+        }
+      
 </style>
 </head>
 <body>
