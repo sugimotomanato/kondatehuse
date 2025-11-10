@@ -35,7 +35,11 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
 </head>
 <body>
 <div style="text-align: center;">
+<<<<<<< HEAD
     <img src="images/haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
+=======
+    <img src="kondatehuse/haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
+>>>>>>> 68ae17b72e05f7ea27fa4ee0ca030f1b62dc2126
     <form action="U16.php" method="post">
        <label for="system_ID">管理者ID</label>
 <p><input type="text" name="system_ID" id="system_ID" required></p>

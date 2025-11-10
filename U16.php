@@ -24,25 +24,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute([$ID]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // ✅ 両方の比較方法を採用
             $isValid = false;
-            if ($user) {
-                // ハッシュ化されている場合
-                if (password_verify($pass, $user['system_users_password'])) {
+
+            if ($user && !empty($user['system_users_password'])) {
+
+                $stored_pass = $user['system_users_password'];
+
+                // ① ハッシュの場合のみ password_verify 実行
+                if (strlen($stored_pass) > 50 && password_verify($pass, $stored_pass)) {
                     $isValid = true;
                 }
-                // 平文保存されている場合
-                elseif ($pass === $user['system_users_password']) {
+                // ② 平文の場合（同一文字列で完全一致したときのみ許可）
+                elseif ($pass === $stored_pass) {
                     $isValid = true;
                 }
             }
 
-            if ($isValid==true) {
-                // ✅ ログイン成功時の処理
+            if ($isValid) {
                 header('Location: complete.php');
                 exit();
             } else {
-                // ❌ 失敗時
                 header('Location: ./U15.php');
                 exit();
             }
@@ -56,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -64,6 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Document</title>
 </head>
 <body>
+    <img src="kondatehuse/haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
         <h1>献立家</h1>
 <a href="U17.php">ユーザ退会処理 ></a>
 
