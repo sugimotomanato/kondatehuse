@@ -3,8 +3,6 @@
 $errors = [];
 $code = '';
 $name = '';
-$complete_page = 'U03.php'; 
-
 // ==========================================================
 // データベース接続設定
 // ==========================================================
@@ -15,7 +13,7 @@ $db_name = 'LAA1685019-kondatehausu';
 
     if (empty($errors)) {
         try {
-           $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=UTF-8", $db_user, $db_pass);
+            $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // 管理者を取得
