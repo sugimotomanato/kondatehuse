@@ -96,7 +96,7 @@ $safe_confirm_code = htmlspecialchars($confirm_code);
             </p>
             
             <div class="button-group">
-                <form method="post" action="delete_execute.php">
+                <form method="post" action="U01.php">
                     <input type="hidden" name="family_code" value="<?php echo $safe_code; ?>">
                     <input type="hidden" name="confirm_code" value="<?php echo $safe_confirm_code; ?>">
                     <button type="submit" class="button-style btn-ok">大丈夫です</button>

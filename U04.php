@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
             <?php endif; ?>
 
-            <form method="post" action="delete_account.php">
+            <form method="post" action="U05.php">
                 
                 <label for="family_code">家族コードの入力（6文字英数以上）</label>
                 <input type="text" id="family_code" name="family_code" 
