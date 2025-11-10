@@ -3,8 +3,6 @@
 $errors = [];
 $code = '';
 $name = '';
-$complete_page = 'U03.php'; 
-
 // ==========================================================
 // データベース接続設定
 // ==========================================================
@@ -15,17 +13,19 @@ $db_name = 'LAA1685019-kondatehausu';
 
     if (empty($errors)) {
         try {
-           $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
+            $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // 管理者を取得
-            $stmt = $pdo->prepare("SELECT parent_account_ID, parent_account, user_name  FROM parent_account ORDER BY id ASC");
+$stmt = $pdo->prepare("SELECT parent_account_ID, parent_account, user_name FROM parent_account");
+
 
           $stmt->execute();
 
+
     // 結果を配列で取得
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+var_dump($results);
         } catch (PDOException $e) {
             echo "DB接続エラー: " . $e->getMessage();
         }
@@ -55,6 +55,7 @@ $db_name = 'LAA1685019-kondatehausu';
 </style>
 </head>
 <body>
+    <img src="kondatehuse/haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
     <h2 style="text-align:center;">ユーザー一覧</h2>
 <input type="text" id="keyword" placeholder="入力">
 <button id="searchBtn">検索</button>

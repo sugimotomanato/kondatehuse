@@ -26,7 +26,7 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
     <title>Document</title>
     <style>
         body {
-          background-image: url('images/background.jpg');
+          background-image: url('images/haikei2.jpg');
           background-size: cover;      /* 画面全体にフィット */
           background-position: center; /* 中央に配置 */
           background-repeat: no-repeat;/* 繰り返さない */
@@ -35,7 +35,15 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
 </head>
 <body>
 <div style="text-align: center;">
-    <img src="images/kondatehausu-1.png" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
+<<<<<<< HEAD
+    <img src="haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
+=======
+<<<<<<< HEAD
+    <img src="images/haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
+=======
+    <img src="kondatehuse/haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
+>>>>>>> 68ae17b72e05f7ea27fa4ee0ca030f1b62dc2126
+>>>>>>> 1d5eed66c78e76a0f8f54d044ffe41960d8fd17b
     <form action="U16.php" method="post">
        <label for="system_ID">管理者ID</label>
 <p><input type="text" name="system_ID" id="system_ID" required></p>
@@ -47,7 +55,6 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
     </form>
 
     <a href="U19.php">管理者登録はこちら</a>
-</div>
 
 </body>
 </html>
