@@ -48,7 +48,7 @@
             
             /* 【修正点】ローカル実行用に相対パスに戻しました。*/
             /* HTMLファイルと同じフォルダに haikei.jpg を置いてください。*/
-            background-image: url('haikei1.jpg'); 
+            background-image: url('haikei2.jpg'); 
             
             background-size: cover;
             background-position: center;
@@ -138,7 +138,7 @@
         <header class="p-4 flex flex-row justify-between items-center sticky top-0 z-10 border-b border-gray-100 header-bg">
             
             <!-- ホームタイトル (左寄せ) -->
-            <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">ホーム</h1>
+            <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">カレンダー</h1>
 
             <!-- ハンバーガーメニュー (右端) - ドロワー開閉用 -->
             <button id="menu-button" class="p-2 text-gray-600 hover:text-gray-800 rounded-full transition duration-150 ui-element-bg">
@@ -151,81 +151,54 @@
         <!-- メインスクロールエリア -->
         <div class="p-4 space-y-6 ui-element-bg">
 
-            <!-- 1. 今日の人気献立 (水平横スクロール) - 日付ピッカーを統合 -->
-            <section>
-                <div class="flex items-center space-x-1 mb-3">
-                    <!-- 日付ピッカーのトリガー -->
-                    <h2 id="date-picker-trigger" class="text-xl font-bold text-primary-pink cursor-pointer relative">
-                        今日
-                        <!-- 下向き矢印 -->
-                        <span class="text-sm text-gray-700 ml-1">▼</span>
-                        <!-- 日付ピッカーメニュー (初期は非表示) -->
-                        <div id="date-picker-menu" class="date-picker-menu bg-white border border-gray-200 rounded-lg shadow-xl hidden p-1">
-                            <button class="date-option block w-full text-left p-2 hover:bg-gray-100 rounded-md" data-value="今日">今日</button>
-                            <button class="date-option block w-full text-left p-2 hover:bg-gray-100 rounded-md" data-value="先週">先週</button>
-                            <button class="date-option block w-full text-left p-2 hover:bg-gray-100 rounded-md" data-value="先月">先月</button>
-                            <button class="date-option block w-full text-left p-2 hover:bg-gray-100 rounded-md" data-value="翌年">翌年</button>
-                            <button class="date-option block w-full text-left p-2 hover:bg-gray-100 rounded-md" data-value="ランダム">ランダム</button>
-                        </div>
-                    </h2>
+<input type="month" id="month" name="month" value="2025-10" min="2000-01" max="2030-12">
+</form>
+<script>
+ // 送信時の値は "2025-10" になる（必要ならスラッシュに変換）
+ document.querySelector('form').addEventListener('submit', e => {
+   e.preventDefault();
+   const v = document.getElementById('month').value; // "2025-10"
+   console.log(v);
+   console.log(v.replace('-', '/')); // "2025/10"
+ });
+</script>
                     
-                    <!-- 見出しの遷移部分 -->
-                    <h2 class="text-xl font-bold text-gray-700">の人気献立
-                        <span id="popular-detail-link" class="text-sm font-normal text-primary-pink ml-2 cursor-pointer hover:underline">
-                            へ移動
-                        </span>
-                    </h2>
+                    
                 </div>
 
-                <div id="popular-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
-                    <!-- カード (全3枚) - meal-cardクラスを適用し統一 -->
+                <section>
+               
+                <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="1">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Dish+Image+1'); background-size: cover;"></div>
+                    <!-- カード 1 (日付表示) -->
+                    <div class="flex-shrink-0 meal-card relative" data-meal-id="7">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+1'); background-size: cover;"></div>
+                        <!-- 日付バッジ -->
+                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">1(月)</span>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや詳細</p>
-                        </div>
-                        <div class="absolute top-2 right-2 p-1 rounded-full bg-white/70 backdrop-blur-sm shadow-md flex items-center space-x-1">
-                            
-                            <!-- いいねハートボタン -->
-                            <button class="like-button p-0.5 text-secondary-gray transition duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-none stroke-current" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
+                            <p class="text-xs text-gray-500">レシピや評価</p>
                         </div>
                     </div>
 
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="2">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Dish+Image+2'); background-size: cover;"></div>
+                    <!-- カード 2 (日付表示と赤いハイライト) -->
+                    <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+2'); background-size: cover;"></div>
+                        <!-- 日付バッジ (赤色) -->
+                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">2(火)</span>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや詳細</p>
-                        </div>
-                        <div class="absolute top-2 right-2 p-1 rounded-full bg-white/70 backdrop-blur-sm shadow-md flex items-center space-x-1">
-                            
-                            <button class="like-button p-0.5 text-secondary-gray transition duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-none stroke-current" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
+                            <p class="text-xs text-gray-500">レシピや評価</p>
                         </div>
                     </div>
 
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="3">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Dish+Image+3'); background-size: cover;"></div>
+                    <!-- カード 3 -->
+                    <div class="flex-shrink-0 meal-card relative" data-meal-id="9">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+3'); background-size: cover;"></div>
+                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">3(水)</span>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや詳細</p>
-                        </div>
-                        <div class="absolute top-2 right-2 p-1 rounded-full bg-white/70 backdrop-blur-sm shadow-md flex items-center space-x-1">
-                            
-                            <button class="like-button p-0.5 text-secondary-gray transition duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-none stroke-current" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
+                            <p class="text-xs text-gray-500">レシピや評価</p>
                         </div>
                     </div>
                 </div>
@@ -233,76 +206,84 @@
 
             <!-- 2. お気に入り (水平横スクロール) -->
             <section>
-                <h2 class="text-xl font-bold mb-3 text-gray-700">お気に入り
-                    <span id="favorite-detail-link" class="text-sm font-normal text-primary-pink ml-2 cursor-pointer hover:underline">
-                        へ移動
-                    </span>
-                </h2>
-                <div id="favorite-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
+               
+                <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     
-                    <!-- カード 1 (星：アクティブ) -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="4">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Favorite+Dish+1'); background-size: cover;"></div>
+                    <!-- カード 1 (日付表示) -->
+                    <div class="flex-shrink-0 meal-card relative" data-meal-id="7">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+1'); background-size: cover;"></div>
+                        <!-- 日付バッジ -->
+                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">1(月)</span>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
                         </div>
-                        <div class="absolute top-2 right-2 p-1 rounded-full bg-white/70 backdrop-blur-sm shadow-md flex items-center space-x-1">
-                            <span class="text-xs font-bold text-gray-700">1位</span>
-                            <!-- 星ボタン (アクティブ) -->
-                            <button id="star-btn-1" class="star-button p-0.5 text-accent-yellow transition duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.05 8.72a1 1 0 01.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                            </button>
-                        </div>
                     </div>
 
-                    <!-- カード 2 (星：非アクティブ) -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="5">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Favorite+Dish+2'); background-size: cover;"></div>
+                    <!-- カード 2 (日付表示と赤いハイライト) -->
+                    <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+2'); background-size: cover;"></div>
+                        <!-- 日付バッジ (赤色) -->
+                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">2(火)</span>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
                         </div>
-                        <div class="absolute top-2 right-2 p-1 rounded-full bg-white/70 backdrop-blur-sm shadow-md flex items-center space-x-1">
-                            <span class="text-xs font-bold text-gray-700">2位</span>
-                            <!-- 星ボタン (非アクティブ) -->
-                            <button id="star-btn-2" class="star-button p-0.5 text-secondary-gray transition duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-none stroke-current" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.54 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                                </svg>
-                            </button>
-                        </div>
                     </div>
 
-                    <!-- カード 3 (横スクロールのため追加) -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="6">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Favorite+Dish+3'); background-size: cover;"></div>
+                    <!-- カード 3 -->
+                    <div class="flex-shrink-0 meal-card relative" data-meal-id="9">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+3'); background-size: cover;"></div>
+                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">3(水)</span>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
                         </div>
-                        <div class="absolute top-2 right-2 p-1 rounded-full bg-white/70 backdrop-blur-sm shadow-md flex items-center space-x-1">
-                            <span class="text-xs font-bold text-gray-700">3位</span>
-                            <button id="star-btn-3" class="star-button p-0.5 text-secondary-gray transition duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-none stroke-current" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.54 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                                </svg>
-                            </button>
-                        </div>
                     </div>
-
                 </div>
             </section>
 
             <!-- 3. カレンダー (水平横スクロール) -->
             <section>
-                <h2 class="text-xl font-bold mb-3 text-gray-700">カレンダー
-                    <span id="calendar-detail-link" class="text-sm font-normal text-primary-pink ml-2 cursor-pointer hover:underline">
-                        へ移動
-                    </span>
-                </h2>
+               
+                <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
+                    
+                    <!-- カード 1 (日付表示) -->
+                    <div class="flex-shrink-0 meal-card relative" data-meal-id="7">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+1'); background-size: cover;"></div>
+                        <!-- 日付バッジ -->
+                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">1(月)</span>
+                        <div class="p-2">
+                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
+                            <p class="text-xs text-gray-500">レシピや評価</p>
+                        </div>
+                    </div>
+
+                    <!-- カード 2 (日付表示と赤いハイライト) -->
+                    <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+2'); background-size: cover;"></div>
+                        <!-- 日付バッジ (赤色) -->
+                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">2(火)</span>
+                        <div class="p-2">
+                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
+                            <p class="text-xs text-gray-500">レシピや評価</p>
+                        </div>
+                    </div>
+
+                    <!-- カード 3 -->
+                    <div class="flex-shrink-0 meal-card relative" data-meal-id="9">
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+3'); background-size: cover;"></div>
+                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">3(水)</span>
+                        <div class="p-2">
+                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
+                            <p class="text-xs text-gray-500">レシピや評価</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+               
                 <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     
                     <!-- カード 1 (日付表示) -->
@@ -340,76 +321,10 @@
             </section>
 
 
-            <!-- 4. 今日の献立 登録エリア (メインビジュアル) -->
-            <section class="mt-8">
-                <h2 class="text-xl font-bold mb-3 text-gray-700">今日の献立</h2>
-                <!-- 高さを h-[250px] に縮小 -->
-                <div id="register-area" class="w- h-[300px] rounded-2xl shadow-xl flex justify-center items-center relative overflow-hidden bg-white" style="background-image: url('https://placehold.co/600x400/f0f0f0/333?text=Dining+Table+Image'); background-size: cover; background-position: center;">
-                    <div class="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
-                    <!-- 登録ボタン (直接 U11TOUROKU.php に遷移する処理を埋め込み) -->
-                    <button id="register-button" 
-                            onclick="window.location.href='U11.php'" 
-                            class="relative w-10 h-10 bg-primary-pink/90 text-white rounded-full shadow-2xl shadow-primary-pink/50 flex items-center justify-center transition duration-300 transform hover:scale-105 active:scale-95">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>
-                    </button>
-                    
-                </div>
-            </section>
+           
         </div>
 
-        <!-- 固定フッター (下部ナビゲーション) -->
-        <footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto border-t border-gray-200 shadow-2xl p-3 z-20 ui-element-bg">
-            <!-- 献立リアクションと検索バーのコンテナ -->
-            <div class="flex flex-col space-y-3">
-                
-                <!-- 献立リアクション (水平横スクロール) -->
-                <div id="reaction-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-3 pb-2 justify-start">
-                    <!-- 自分のリアクション (アクティブ) -->
-                    <div class="flex-shrink-0 text-center w-16">
-                        <button class="reaction-item w-12 h-12 text-3xl p-1 bg-primary-pink/10 border-2 border-primary-pink rounded-full transition duration-150 transform hover:scale-105">
-                            <span id="my-reaction-emoji" role="img" aria-label="自分">😊</span>
-                        </button>
-                        <!-- 名前同期 -->
-                        <p id="my-reaction-name" class="text-xs font-medium text-primary-pink mt-1">自分</p>
-                    </div>
-
-                    <!-- 友達のリアクション (非アクティブ) -->
-                    <div class="flex-shrink-0 text-center w-16">
-                        <button class="reaction-item w-12 h-12 text-3xl p-1 bg-gray-100 border-2 border-transparent rounded-full transition duration-150 hover:border-gray-300">
-                            <span role="img" aria-label="名前">😥</span>
-                        </button>
-                        <p class="text-xs font-medium text-gray-500 mt-1">名前</p>
-                    </div>
-                    
-                    <div class="flex-shrink-0 text-center w-16">
-                        <button class="reaction-item w-12 h-12 text-3xl p-1 bg-gray-100 border-2 border-transparent rounded-full transition duration-150 hover:border-gray-300">
-                            <span role="img" aria-label="名前">😭</span>
-                        </button>
-                        <p class="text-xs font-medium text-gray-500 mt-1">名前</p>
-                    </div>
-
-                    <div class="flex-shrink-0 text-center w-16">
-                        <button class="reaction-item w-12 h-12 text-3xl p-1 bg-gray-100 border-2 border-transparent rounded-full transition duration-150 hover:border-gray-300">
-                            <span role="img" aria-label="名前">😠</span>
-                        </button>
-                        <p class="text-xs font-medium text-gray-500 mt-1">名前</p>
-                    </div>
-
-                    <div class="flex-shrink-0 text-center w-16">
-                        <button class="reaction-item w-12 h-12 text-3xl p-1 bg-gray-100 border-2 border-transparent rounded-full transition duration-150 hover:border-gray-300">
-                            <span role="img" aria-label="名前">😁</span>
-                        </button>
-                        <p class="text-xs font-medium text-gray-500 mt-1">名前</p>
-                    </div>
-
-                    <div class="flex-shrink-0 text-center w-16">
-                        <button class="reaction-item w-12 h-12 text-3xl p-1 bg-gray-100 border-2 border-transparent rounded-full transition duration-150 hover:border-gray-300">
-                            <span role="img" aria-label="名前">😝</span>
-                        </button>
-                        <p class="text-xs font-medium text-gray-500 mt-1">名前</p>
-                    </div>
+        
                 </div>
 
                 <!DOCTYPE html>
@@ -432,27 +347,7 @@
             検索バーのコンテナ: 
             白背景、カプセル型の角丸 (rounded-full)、柔らかな影 (shadow-xl)、Flexでアイコンと入力を配置 
         -->
-        <div class="search-container bg-white p-2 rounded-full shadow-xl flex items-center ring-1 ring-gray-200">
-            
-            <!-- 検索アイコン (SVGを使用) -->
-            <button onclick="handleSearchClick()" class="p-2 ml-2 text-gray-500 hover:text-gray-700 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-            </button>
-
-            <!-- 検索入力フィールド -->
-            <input 
-                type="text" 
-                id="searchInput" 
-                placeholder="検索" 
-                class="w-full h-10 text-lg text-gray-700 bg-white border-none focus:ring-0 focus:outline-none placeholder-gray-500"
-                onkeypress="if(event.key === 'Enter') handleSearchClick()"
-                autocomplete="off"
-            >
-        </div>
-
+        
         <div id="alertMessage" class="mt-4 text-center text-red-600 opacity-0 transition-opacity duration-300">
             キーワードを入力してください。
         </div>
@@ -557,6 +452,9 @@
                     </a>
                     <a href="#" class="block hover:text-primary-pink transition duration-150" onclick="showMessageBox('グループ削除画面へ遷移します。'); closeDrawer(); return false;">
                         グループ削除
+                    </a>
+                    <nav class="space-y-6 text-gray-700 text-lg font-semibold">
+                    <a href="U07.php">ホーム
                     </a>
                 </nav>
             </div>
