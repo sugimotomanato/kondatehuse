@@ -14,6 +14,7 @@ $db_pass = '6group'; // 画像のパスワードから推測
 $db_name = 'LAA1685019'; // 画像のDB名から推測
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,6 +23,6 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
     <title>Document</title>
 </head>
 <body>
-    
+    削除しますか？
 </body>
 </html>
