@@ -27,12 +27,12 @@ $id = $_GET['parent_account_ID'] ?? ''; // 安全に取得
     <h1>削除しますか？</h1>
     <p>ID: <?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?></p>
 
-    <form action="U19ADMIN_MAKE.php" method="post" style="display:inline;">
+    <form action="U19.php" method="post" style="display:inline;">
         <input type="hidden" name="parent_account_ID" value="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?>">
         <button type="submit" name="action" value="delete">はい</button>
     </form>
 
-    <form action="U18ADMIN_DELEATE_LAST.php" method="get" style="display:inline;">
+    <form action="U17ADMIN_DELEATE.php" method="get" style="display:inline;">
         <button type="submit">いいえ</button>
     </form>
 </body>

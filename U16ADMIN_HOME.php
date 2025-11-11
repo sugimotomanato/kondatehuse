@@ -25,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $isValid = false;
-
             if ($user && !empty($user['system_users_password'])) {
                 $stored_pass = $user['system_users_password'];
 
@@ -38,6 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $isValid = true;
                 }
             }
+
+            
 
             if ($isValid) {
                 // ログイン成功
