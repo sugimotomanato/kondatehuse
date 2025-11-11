@@ -27,14 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $isValid = false;
             if ($user && !empty($user['system_users_password'])) {
+                                echo 'あり';
                 $stored_pass = $user['system_users_password'];
             
                 // まず password_verify() でチェック（ハッシュ対応）
                 if (password_verify($pass, $stored_pass)) {
+                                    echo 'ハッシュ';
                     $isValid = true;
                 }
                 // password_verify が false のとき、平文一致をチェック
                 elseif ($pass === $stored_pass) {
+                                    echo '平分';
                     $isValid = true;
                 }
             }
