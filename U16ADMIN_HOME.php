@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit();
             } else {
                 // ログイン失敗
-                header('Location: ./U15.php');
+                header('Location: ./U15ADMIN_LOGIN.php');
                 exit();
             }
 
@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <img src="haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
         <h1>献立家</h1>
-<a href="U17.php">ユーザ退会処理 ></a>
+<a href="U17ADMIN_DELEATE.php">ユーザ退会処理 ></a>
 
 </body>
 </html>
