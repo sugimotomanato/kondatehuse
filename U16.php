@@ -1,9 +1,9 @@
 <?php
 $errors = [];
 $db_host = 'mysql320.phy.lolipop.lan';
-$db_user = 'LAA1685019-kondatehausu';
-$db_pass = '6group';
-$db_name = 'LAA1685019';
+$db_user = 'LAA1685019'; 
+$db_pass = '6group'; 
+$db_name = 'LAA1685019-kondatehausu'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -16,10 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($errors)) {
         try {
-            $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
+            $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // 管理者を取得
+            // IDで検索（数値のIDを使う）
             $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
             $stmt->execute([$ID]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -27,33 +27,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $isValid = false;
 
             if ($user && !empty($user['system_users_password'])) {
-
                 $stored_pass = $user['system_users_password'];
 
-                // ① ハッシュの場合のみ password_verify 実行
-                if (strlen($stored_pass) > 50 && password_verify($pass, $stored_pass)) {
+                // まず password_verify() でチェック（ハッシュ対応）
+                if (password_verify($pass, $stored_pass)) {
                     $isValid = true;
                 }
-                // ② 平文の場合（同一文字列で完全一致したときのみ許可）
+                // password_verify が false のとき、平文一致をチェック
                 elseif ($pass === $stored_pass) {
                     $isValid = true;
                 }
             }
 
             if ($isValid) {
+                // ログイン成功
                 header('Location: complete.php');
                 exit();
             } else {
+                // ログイン失敗
                 header('Location: ./U15.php');
                 exit();
             }
 
         } catch (PDOException $e) {
-            echo "DB接続エラー: " . $e->getMessage();
+            echo "DB接続エラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
         }
     }
 }
 ?>
+
 
 
 
@@ -64,13 +66,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+          background-image: url('images/haikei2.jpg');
+          background-size: cover;      /* 画面全体にフィット */
+          background-position: center; /* 中央に配置 */
+          background-repeat: no-repeat;/* 繰り返さない */
+        }
+      </style>
 </head>
 <body>
-    <div style="text-align: center;">
     <img src="haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
         <h1>献立家</h1>
 <a href="U17.php">ユーザ退会処理 ></a>
-</div>
 
 </body>
 </html>
