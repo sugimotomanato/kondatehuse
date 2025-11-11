@@ -9,8 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $ID = $_POST['system_ID'] ?? '';
     $pass = $_POST['system_password'] ?? '';
-    
-$hashed = password_hash($pass, PASSWORD_DEFAULT);
 
     if (empty($ID) || empty($pass)) {
         $errors[] = "IDまたはパスワードが未入力です。";
@@ -21,7 +19,7 @@ $hashed = password_hash($pass, PASSWORD_DEFAULT);
             $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // 管理者を取得
+            // IDで検索（数値のIDを使う）
             $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
             $stmt->execute([$ID]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,33 +27,35 @@ $hashed = password_hash($pass, PASSWORD_DEFAULT);
             $isValid = false;
 
             if ($user && !empty($user['system_users_password'])) {
-                    $stored_pass = $user['system_users_password'];
+                $stored_pass = $user['system_users_password'];
 
-    // まず password_verify() を試す（ハッシュでも平文でもOK）
-                   if (password_verify($pass, $stored_pass)) {
-                      $isValid = true;
-                          } 
-    // password_verify が false なら、平文での完全一致を試す
-                       elseif ($pass === $stored_pass) {
-                          $isValid = true;
-                                   }
-                           }
-
+                // まず password_verify() でチェック（ハッシュ対応）
+                if (password_verify($pass, $stored_pass)) {
+                    $isValid = true;
+                }
+                // password_verify が false のとき、平文一致をチェック
+                elseif ($pass === $stored_pass) {
+                    $isValid = true;
+                }
+            }
 
             if ($isValid) {
+                // ログイン成功
                 header('Location: complete.php');
                 exit();
             } else {
+                // ログイン失敗
                 header('Location: ./U15.php');
                 exit();
             }
 
         } catch (PDOException $e) {
-            echo "DB接続エラー: " . $e->getMessage();
+            echo "DB接続エラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
         }
     }
 }
 ?>
+
 
 
 
