@@ -9,6 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $ID = $_POST['system_ID'] ?? '';
     $pass = $_POST['system_password'] ?? '';
+    
+$hashed = password_hash($pass, PASSWORD_DEFAULT);
 
     if (empty($ID) || empty($pass)) {
         $errors[] = "IDまたはパスワードが未入力です。";
@@ -27,18 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $isValid = false;
 
             if ($user && !empty($user['system_users_password'])) {
+                    $stored_pass = $user['system_users_password'];
 
-                $stored_pass = $user['system_users_password'];
+    // まず password_verify() を試す（ハッシュでも平文でもOK）
+                   if (password_verify($pass, $stored_pass)) {
+                      $isValid = true;
+                          } 
+    // password_verify が false なら、平文での完全一致を試す
+                       elseif ($pass === $stored_pass) {
+                          $isValid = true;
+                                   }
+                           }
 
-                // ① ハッシュの場合のみ password_verify 実行
-                if (strlen($stored_pass) > 50 && password_verify($pass, $stored_pass)) {
-                    $isValid = true;
-                }
-                // ② 平文の場合（同一文字列で完全一致したときのみ許可）
-                elseif ($pass === $stored_pass) {
-                    $isValid = true;
-                }
-            }
 
             if ($isValid) {
                 header('Location: complete.php');
