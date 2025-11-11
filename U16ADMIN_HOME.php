@@ -20,15 +20,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // IDで検索（数値のIDを使う）
-            $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = :system_users_id");
-            $stmt->execute(['system_users_id' => $ID]);
+            $stmt = $pdo->prepare('SELECT * FROM system WHERE system_users_id = ?');
+            $stmt->execute([$ID]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
             $isValid = false;
             if ($user && !empty($user['system_users_password'])) {
                 $stored_pass = $user['system_users_password'];
-
+            
                 // まず password_verify() でチェック（ハッシュ対応）
                 if (password_verify($pass, $stored_pass)) {
                     $isValid = true;
@@ -42,11 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
 
             if ($isValid) {
-                // ログイン成功
+                echo 'ログイン成功';
                 header('Location: complete.php');
                 exit();
             } else {
-                // ログイン失敗
+                echo 'ログイン失敗';
                 header('Location: ./U15ADMIN_LOGIN.php');
                 exit();
             }
