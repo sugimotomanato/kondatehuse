@@ -112,11 +112,11 @@ if($_Server["REQUEST_METHOD"] === "POST") {
                 </from>
                 </div>
                 <div class="link">
-                    <a href="register.php">未登録の方はこちら</a>
+                    <a href="U02.php">未登録の方はこちら</a>
                 </div>
 
                 <div class="admin-link">
-                    <a href="admin.php">管理者用ページ</a>
+                    <a href="U15ADMIN_LOGIN.php">管理者用ページ</a>
                 </div>
         </body>
 </html>
