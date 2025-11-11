@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <?php
 // delete_account.php から POST で家族コードを受け取る
 $code = $_POST['family_code'] ?? '';
@@ -109,5 +109,4 @@ $safe_confirm_code = htmlspecialchars($confirm_code);
     </div>
 </body>
 </html>
-=======
->>>>>>> 04801d40ba077c821c46427cd64186129328a1c3
+
