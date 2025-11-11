@@ -52,10 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
         } catch (PDOException $e) {
-                header('Location: ./U15ADMIN_LOGIN.php');
-                exit();
             echo "DB接続エラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
             // ログイン失敗
+                header('Location: ./U15ADMIN_LOGIN.php');
+                exit();
+          
         }
     }
 }
