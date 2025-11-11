@@ -20,9 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // IDで検索（数値のIDを使う）
-            $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
-            $stmt->execute([$ID]);
+            $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = :system_users_id");
+            $stmt->execute(['system_users_id' => $ID]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
             $isValid = false;
             if ($user && !empty($user['system_users_password'])) {
@@ -52,6 +53,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } catch (PDOException $e) {
             echo "DB接続エラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+            // ログイン失敗
+                header('Location: ./U15ADMIN_LOGIN.php');
+                exit();
         }
     }
 }
