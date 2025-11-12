@@ -60,7 +60,7 @@ if ($family_code === 'コードを取得できませんでした') {
             <p class="complete-title">あなたの家族コード</p>
             <div class="code-display"><?php echo $display_code; ?></div>
             <p class="note"># どこかに記録をしておいてください</p>
-            <a href="U01.php" class="login-link">ログインに戻る</a>
+            <a href="U01LOGIN.php" class="login-link">ログインに戻る</a>
         </div>
     </div>
 </body>

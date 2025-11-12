@@ -112,7 +112,7 @@ if($_Server["REQUEST_METHOD"] === "POST") {
                 </from>
                 </div>
                 <div class="link">
-                    <a href="U02.php">未登録の方はこちら</a>
+                    <a href="U02MAKE.php">未登録の方はこちら</a>
                 </div>
 
                 <div class="admin-link">

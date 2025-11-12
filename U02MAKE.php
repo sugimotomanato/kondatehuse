@@ -3,7 +3,7 @@
 $errors = [];
 $code = '';
 $name = '';
-$complete_page = 'U03.php'; 
+$complete_page = 'U03MAKE_LAST.php'; 
 
 // ==========================================================
 // データベース接続設定
@@ -153,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
             <?php endif; ?>
 
-            <form method="post" action="U02.php">
+            <form method="post" action="U02MAKE.php">
                 <label for="parent_account">家族コードを作成（6文字英数以上）</label>
                 <input type="text" id="parent_account" name="parent_account" 
                         value="<?php echo htmlspecialchars($code); ?>" 
