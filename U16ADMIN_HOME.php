@@ -55,6 +55,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
           
         }
+    }else{
+         header('Location: ./U15ADMIN_LOGIN.php');
+                exit();
     }
 }
 ?>
