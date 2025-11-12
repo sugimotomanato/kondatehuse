@@ -12,8 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($ID) || empty($pass)) {
         $errors[] = "IDまたはパスワードが未入力です。";
-        header('Location: ./U15ADMIN_LOGIN.php');
-                exit();
     }
 
     if (empty($errors)) {
@@ -22,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // IDで検索（数値のIDを使う）
-            $stmt = $pdo->prepare("SELECT `system_users_id` FROM `system` WHERE `system_users_id` = ?");
+            $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
             $stmt->execute([$ID]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -52,10 +50,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
         } catch (PDOException $e) {
-            echo "DB接続エラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
-            // ログイン失敗
-                header('Location: ./U15ADMIN_LOGIN.php');
+              header('Location: ./U15ADMIN_LOGIN.php');
                 exit();
+                
           
         }
     }
