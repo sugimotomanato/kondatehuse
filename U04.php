@@ -1,4 +1,3 @@
-
 <?php
 // エラーメッセージを初期化
 $errors = [];
@@ -9,13 +8,12 @@ $confirm_code = '';
 // データベース接続設定 (ロリポップ情報を使用)
 // ==========================================================
 // ※ XAMPP環境で試す場合は、必ずロリポップ側で外部接続を許可してください。
-//    許可できない場合は、手順2の代替案を参照し、ローカルDB情報に一時的に変更してください。
 $db_host = 'mysql320.phy.lolipop.lan'; //
 $db_user = 'LAA1685019-kondatehausu'; //
 $db_pass = '6group'; //
 $db_name = 'LAA1685019'; //
 
-$delete_complete_page = 'U05x.php'; 
+$delete_complete_page = 'U05.php'; 
 
 // フォームがPOST送信された場合の処理
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -25,13 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirm_code = $_POST['confirm_code'] ?? '';
     
     // 2. 入力チェック
-    
-    // 家族コードは6文字以上の英数字
     if (empty($code) || strlen($code) < 6 || !ctype_alnum($code)) {
         $errors[] = "家族コードは6文字以上の英数字で入力してください。";
     }
     
-    // 家族コードの一致チェック
     if ($code !== $confirm_code) {
         $errors[] = "家族コードが一致しません。";
     }
@@ -43,16 +38,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // 3-1. 家族コード（password_hash）の存在チェックと削除
-            
-            // 削除対象のレコード数を取得
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM parent_account WHERE password_hash = ?");
+            // 3-1. 家族コード（parent_account）の存在チェックと削除
+            // ★修正: password_hashを parent_account に変更
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM parent_account WHERE parent_account = ?");
             $stmt->execute([$code]);
             $count = $stmt->fetchColumn();
 
             if ($count > 0) {
                 // レコードが存在する場合、削除を実行
-                $sql = "DELETE FROM parent_account WHERE password_hash = ?";
+                // ★修正: password_hashを parent_account に変更
+                $sql = "DELETE FROM parent_account WHERE parent_account = ?";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([$code]);
                 
@@ -66,13 +61,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } catch (PDOException $e) {
             // SQLエラーや接続エラーが発生した場合
-            $errors[] = "データベースエラーが発生しました: " . $e->getMessage();
-            // 接続情報の問題が考えられる場合は、ローカルDBに変更してみてください。
+            $errors[] = "データベースエラーが発生しました。詳細はログを確認してください。";
+            // 接続エラーやその他の詳細エラーを表示するためのデバッグ処理
+            die("データベースエラーが発生しました: " . $e->getMessage());
         }
     }
 }
 // ==========================================================
 // HTML出力開始
+// (HTML部分は変更なし)
 // ==========================================================
 ?>
 
@@ -83,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>アカウント削除</title>
     <style>
-        /* CSSは、画像のデザインを再現するため、以前のコードに基づき作成します */
+        /* CSS省略 */
         body { 
             font-family: sans-serif; 
             text-align: center; 
@@ -121,8 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .submit-container { text-align: center; margin-top: 30px; }
         button[type="submit"] { 
-            /* 画像の「確定」ボタンのスタイル */
-            background-color: #70d870; /* 明るい緑 */
+            background-color: #70d870; 
             color: white;
             border: none;
             padding: 10px 40px;
@@ -172,4 +168,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
-
