@@ -22,6 +22,8 @@ $db_name = 'LAA1685019'; // 画像のDB名から推測
     <title>Document</title>
 </head>
 <body>
-    
+    <form action="U21.php" method="post">
+        <input type="password" name="system_password" id="">
+    </form>
 </body>
 </html>

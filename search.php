@@ -38,17 +38,17 @@ try {
         <?php foreach ($results as $row): ?>
             <tr>
               <td>
-                    <a href="U18.php?id=<?= urlencode($row['parent_account_ID']) ?>">
+                    <a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>">
                         <?= htmlspecialchars($row['parent_account_ID'], ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 </td>
                 <td>
-                    <a href="U18.php?id=<?= urlencode($row['parent_account_ID']) ?>">
+                    <a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>">
                         <?= htmlspecialchars($row['parent_account'], ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 </td>
                 <td>
-                    <a href="U18.php?id=<?= urlencode($row['parent_account_ID']) ?>">
+                    <a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>">
                         <?= htmlspecialchars($row['user_name'], ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 </td>
