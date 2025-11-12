@@ -9,8 +9,8 @@ $db_name = 'LAA1685019-kondatehausu';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $ID = trim($_POST['system_ID'] ?? '');
-    $pass = trim($_POST['system_password'] ?? '');
+    $ID = $_POST['system_ID'] ?? '';
+    $pass = $_POST['system_password'] ?? '';
 
     if ($ID === '' || $pass === '') {
         // 未入力ならエラー
