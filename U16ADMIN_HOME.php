@@ -1,66 +1,68 @@
 <?php
+ob_start(); // 出力バッファを開始（header()エラー防止）
+
 $errors = [];
 $db_host = 'mysql320.phy.lolipop.lan';
 $db_user = 'LAA1685019'; 
 $db_pass = '6group'; 
 $db_name = 'LAA1685019-kondatehausu'; 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $ID = $_POST['system_ID'] ?? '';
-    $pass = $_POST['system_password'] ?? '';
+    $ID = trim($_POST['system_ID'] ?? '');
+    $pass = trim($_POST['system_password'] ?? '');
 
-    if (empty($ID) || empty($pass)) {
-        $errors[] = "IDまたはパスワードが未入力です。";
+    if ($ID === '' || $pass === '') {
+        // 未入力ならエラー
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
     }
 
-    if (empty($errors)) {
-        try {
-            $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    try {
+        $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // IDで検索（数値のIDを使う）
-            $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
-            $stmt->execute([$ID]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // ID検索（数値ID使用）
+        $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
+        $stmt->execute([$ID]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        $isValid = false;
 
-            $isValid = false;
-            if ($user && !empty($user['system_users_password'])) {
-                $stored_pass = $user['system_users_password'];
-            
-                // まず password_verify() でチェック（ハッシュ対応）
-                if (password_verify($pass, $stored_pass)) {
-                    $isValid = true;
-                }
-                // password_verify が false のとき、平文一致をチェック
-                elseif ($pass === $stored_pass) {
-                    $isValid = true;
-                }
+        if ($user && !empty($user['system_users_password'])) {
+            $stored_pass = trim($user['system_users_password']);
+
+            // password_hash対応
+            if (password_verify($pass, $stored_pass)) {
+                $isValid = true;
             }
-
-            
-
-            if ($isValid === true) {
-                header('Location: complete.php');
-                exit();
-            } else {
-                $errors[] =  'ログイン失敗';
-            
+            // 平文パスワード対応
+            elseif ($pass === $stored_pass) {
+                $isValid = true;
             }
-
-        } catch (PDOException $e) {
-              header('Location: ./U15ADMIN_LOGIN.php');
-                exit();
-                
-          
         }
-    }else{
-         header('Location: ./U15ADMIN_LOGIN.php');
-                exit();
+
+        if ($isValid) {
+            // ✅ ログイン成功
+            header('Location: complete.php');
+            exit();
+        } else {
+            // ❌ ログイン失敗
+            header('Location: ./U15ADMIN_LOGIN.php');
+            exit();
+        }
+
+    } catch (PDOException $e) {
+        // DBエラー時
+        error_log("DBエラー: " . $e->getMessage());
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
     }
 }
+
+ob_end_flush();
 ?>
+
 
 
 
