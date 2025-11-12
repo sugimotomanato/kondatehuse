@@ -13,7 +13,7 @@ $db_user = 'LAA1685019-kondatehausu'; //
 $db_pass = '6group'; //
 $db_name = 'LAA1685019'; //
 
-$delete_complete_page = 'U05.php'; 
+$delete_complete_page = 'U05DELEATE_LAST.php'; 
 
 // フォームがPOST送信された場合の処理
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute([$code]);
                 
                 // 4. 削除成功！完了画面へリダイレクト
-                header("Location: U05.php");
+                header("Location: U05DELEATE_LAST.php");
                 exit; 
             } else {
                 // コードが存在しない場合
@@ -148,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
             <?php endif; ?>
 
-            <form method="post" action="U05.php">
+            <form method="post" action="U05DELEATE_LAST.php">
                 
                 <label for="family_code">家族コードの入力（6文字英数以上）</label>
                 <input type="text" id="family_code" name="family_code" 
