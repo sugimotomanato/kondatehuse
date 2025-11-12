@@ -12,7 +12,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-pink': '#ff1493', 
+                        'primary-pink': '#000000', 
                         'secondary-gray': '#D1D5DB', 
                         'accent-yellow': '#FFD700', 
                         'light-bg': '#F9FAFB', 
