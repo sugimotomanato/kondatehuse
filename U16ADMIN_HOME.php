@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
     }
-    
+    try{
         $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -27,11 +27,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
           var_dump($user, $pass, $stored_pass);
+$isValid = false;
 
+        if ($user && !empty($user['system_users_password'])) {
+            $stored_pass = trim($user['system_users_password']);
+
+            // password_hash対応
+            if (password_verify($pass, $stored_pass)) {
+                $isValid = true;
+            }
+            // 平文パスワード対応
+            elseif ($pass === $stored_pass) {
+                $isValid = true;
+            }
+        }
+
+        if ($isValid) {
+            // ✅ ログイン成功
+            header('Location: complete.php');
+            exit();
+        } else {
+            // ❌ ログイン失敗
+            header('Location: ./U15ADMIN_LOGIN.php');
+            exit();
+        }
+
+    } catch (PDOException $e) {
+        // DBエラー時
+        error_log("DBエラー: " . $e->getMessage());
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
+    }
+}
        
 
 
-}
 ?>
 
 
