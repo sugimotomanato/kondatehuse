@@ -2,10 +2,10 @@
 ob_start();
 session_start();
 
-$db_host = 'mysql320.phy.lolipop.lan';
-$db_user = 'LAA1685019'; 
-$db_pass = '6group'; 
-$db_name = 'LAA1685019-kondatehausu'; 
+$db_host = 'mysql320.phy.lolipop.lan';   // ロリポップのMySQLホスト
+$db_user = 'LAA1685019';    // データベースユーザー名
+$db_pass = '6group';                     // データベースパスワード
+$db_name = 'LAA1685019-kondatehausu';              
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $ID = $_POST['system_ID'] ?? '';
@@ -17,8 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     try {
-        $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+           $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
+                $db_user, $db_pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
         $stmt->execute([$ID]);
