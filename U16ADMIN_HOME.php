@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
           var_dump($user, $pass, $stored_pass);
-$isValid = false;
+          $isValid = false;
 
         if ($user && !empty($user['system_users_password'])) {
             $stored_pass = trim($user['system_users_password']);
@@ -48,15 +48,12 @@ $isValid = false;
             exit();
         } else {
             // ❌ ログイン失敗
-            header('Location: ./U15ADMIN_LOGIN.php');
-            exit();
+           echo 'ログイン失敗';
         }
 
     } catch (PDOException $e) {
         // DBエラー時
         error_log("DBエラー: " . $e->getMessage());
-        header('Location: ./U15ADMIN_LOGIN.php');
-        exit();
     }
 }
        
