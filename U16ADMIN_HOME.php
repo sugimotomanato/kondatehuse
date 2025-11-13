@@ -1,64 +1,50 @@
 <?php
-// 出力バッファを開始（header()エラー防止）
+ob_start();
+session_start();
 
-$errors = [];
 $db_host = 'mysql320.phy.lolipop.lan';
 $db_user = 'LAA1685019'; 
 $db_pass = '6group'; 
 $db_name = 'LAA1685019-kondatehausu'; 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $ID = $_POST['system_ID'] ?? '';
     $pass = $_POST['system_password'] ?? '';
 
     if ($ID === '' || $pass === '') {
-        // 未入力ならエラー
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
     }
-    try{
+
+    try {
         $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // ID検索（数値ID使用）
         $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
         $stmt->execute([$ID]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-          $isValid = false;
 
+        $isValid = false;
         if ($user && !empty($user['system_users_password'])) {
             $stored_pass = trim($user['system_users_password']);
-          var_dump($user, $pass, $stored_pass);
-
-            // password_hash対応
-            if (password_verify($pass, $stored_pass)) {
-                $isValid = true;
-            }
-            // 平文パスワード対応
-            elseif ($pass === $stored_pass) {
+            if (password_verify($pass, $stored_pass) || $pass === $stored_pass) {
                 $isValid = true;
             }
         }
 
         if ($isValid) {
-            // ✅ ログイン成功
+            $_SESSION['admin_logged_in'] = true;
+            $_SESSION['admin_id'] = $ID;
             header('Location: complete.php');
             exit();
         } else {
-            // ❌ ログイン失敗
-           echo 'ログイン失敗';
+            echo 'ログイン失敗';
         }
-
     } catch (PDOException $e) {
-        // DBエラー時
         error_log("DBエラー: " . $e->getMessage());
+        echo 'システムエラーが発生しました。';
     }
 }
-       
-
-
 ?>
 
 
