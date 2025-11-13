@@ -26,11 +26,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->execute([$ID]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
-          var_dump($user, $pass, $stored_pass);
           $isValid = false;
 
         if ($user && !empty($user['system_users_password'])) {
             $stored_pass = trim($user['system_users_password']);
+          var_dump($user, $pass, $stored_pass);
 
             // password_hash対応
             if (password_verify($pass, $stored_pass)) {
