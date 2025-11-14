@@ -1,52 +1,30 @@
 <?php
-ob_start();
-session_start();
-
+// ================================================
+// ロリポップ MySQL 接続テスト（本番環境用）
+// ================================================
+ 
 $db_host = 'mysql320.phy.lolipop.lan';   // ロリポップのMySQLホスト
 $db_user = 'LAA1685019';    // データベースユーザー名
 $db_pass = '6group';                     // データベースパスワード
-$db_name = 'LAA1685019-kondatehausu';              
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $ID = $_POST['system_ID'] ?? '';
-    $pass = $_POST['system_password'] ?? '';
-
-    if ($ID === '' || $pass === '') {
-        header('Location: ./U15ADMIN_LOGIN.php');
-        exit();
-    }
-
-    try {
-           $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
-                $db_user, $db_pass);
+$db_name = 'LAA1685019-kondatehausu';                 // データベース名
+ 
+try {
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
+                   $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
-        $stmt->execute([$ID]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $isValid = false;
-        if ($user && !empty($user['system_users_password'])) {
-            $stored_pass = trim($user['system_users_password']);
-            if (password_verify($pass, $stored_pass) || $pass === $stored_pass) {
-                $isValid = true;
-            }
-        }
-
-        if ($isValid) {
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_id'] = $ID;
-            header('Location: complete.php');
-            exit();
-        } else {
-            echo 'ログイン失敗';
-        }
-    } catch (PDOException $e) {
-        error_log("DBエラー: " . $e->getMessage());
-        echo 'システムエラーが発生しました。';
-    }
+ 
+    echo "✅ ロリポップDB接続成功<br>";
+ 
+    // データベース動作確認（現在時刻を取得）
+    $stmt = $pdo->query("SELECT NOW() AS now_time");
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    echo "現在時刻: " . htmlspecialchars($row['now_time'], ENT_QUOTES, 'UTF-8');
+ 
+} catch (PDOException $e) {
+    echo "❌ DB接続エラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
 }
 ?>
+ 
 
 
 
