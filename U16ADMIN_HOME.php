@@ -42,8 +42,6 @@ try {
         if ($isValid) {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_id'] = $ID;
-            header('Location: complete.php');
-            exit();
         } else {
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
