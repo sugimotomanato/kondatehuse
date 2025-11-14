@@ -57,12 +57,6 @@ try {
     }
 }
 ?>
- 
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="ja">
