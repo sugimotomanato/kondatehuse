@@ -12,8 +12,15 @@ $db_name = 'LAA1685019-kondatehausu';         // データベース名
  
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $ID = trim($_POST['system_ID'] ?? '');
-    $pass = trim($_POST['system_password'] ?? '');
+$ID = trim($_POST['system_ID'] ?? '');
+$pass = trim($_POST['system_password'] ?? '');
+
+// ★ 半角英数字でなければエラー
+if (!preg_match('/^[a-zA-Z0-9]+$/', $ID)) {
+    $_SESSION['error'] = "IDは半角英数字で入力してください。";
+    header('Location: ./U15ADMIN_LOGIN.php');
+    exit();
+}
 
     if ($ID === '' || $pass === '') {
      $_SESSION['error'] = "IDとパスワードを入力してください。";
