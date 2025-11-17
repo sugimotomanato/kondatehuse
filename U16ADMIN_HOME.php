@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $pass = trim($_POST['system_password'] ?? '');
 
     if ($ID === '' || $pass === '') {
+     $_SESSION['error'] = "IDとパスワードを入力してください。";
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
     }
@@ -43,13 +44,15 @@ try {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_id'] = $ID;
         } else {
+        $_SESSION['error'] = "ID またはパスワードが違います。";
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
         }
 
  
 } catch (PDOException $e) {
-   error_log("DBエラー: " . $e->getMessage());
+ error_log("DBエラー: " . $e->getMessage());
+        $_SESSION['error'] = "接続エラーが発生しました。";
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
     }
