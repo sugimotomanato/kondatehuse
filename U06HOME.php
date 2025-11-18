@@ -12,7 +12,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-pink': '#000000', 
+                        'primary-pink': '#000000ff', 
                         'secondary-gray': '#D1D5DB', 
                         'accent-yellow': '#FFD700', 
                         'light-bg': '#F9FAFB', 
@@ -48,7 +48,7 @@
             
             /* 【修正点】ローカル実行用に相対パスに戻しました。*/
             /* HTMLファイルと同じフォルダに haikei.jpg を置いてください。*/
-            background-image: url('haikei.jpg'); 
+            background-image: url('haikei1.jpg'); 
             
             background-size: cover;
             background-position: center;
@@ -485,9 +485,9 @@
             // 💡 補足: 検索キーワードをURLパラメータとして渡す場合は以下の形式を使います。
             // const destinationUrl = `U13KENSAKU.php?q=${encodeURIComponent(searchTerm)}`;
             
-            const destinationUrl = "U13KENSAKU.php";
+            const destinationUrl = "U12KENSAKU.php";
             
-            console.log(`U13KENSAKU.phpへ遷移を開始します... (検索語: ${searchTerm})`);
+            console.log(`検索結果へ遷移を開始します... (検索語: ${searchTerm})`);
             
             // 3. 画面遷移を実行
             window.location.href = destinationUrl;
@@ -553,7 +553,7 @@
 
                 <!-- メニューリスト -->
                 <nav class="space-y-6 text-gray-700 text-lg font-semibold">
-                    <a href="U14LIST.php">買い物リスト
+                    <a href="U14MEMO.php">買い物リスト
                     </a>
                     <a href="#" class="block hover:text-primary-pink transition duration-150" onclick="showMessageBox('グループ削除画面へ遷移します。'); closeDrawer(); return false;">
                         グループ削除

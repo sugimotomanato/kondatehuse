@@ -41,7 +41,7 @@ unset($_SESSION['error']); // 1回表示したら消す
        <button type="submit">ログイン</button>
     </form>
 
-    <a href="U19.php">管理者登録はこちら</a>
+    <a href="U19ADMIN_MAKE.php">管理者登録はこちら</a>
 
 </body>
 </html>

@@ -153,12 +153,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="family_code">家族コードの入力（6文字英数以上）</label>
                 <input type="text" id="family_code" name="family_code" 
                        value="<?php echo htmlspecialchars($code); ?>" 
-                       placeholder="0123456789" required minlength="6" pattern="[a-zA-Z0-9]+">
+                       placeholder="コード入力" required minlength="6" pattern="[a-zA-Z0-9]+">
 
                 <label for="confirm_code">家族コードの再入力</label>
                 <input type="text" id="confirm_code" name="confirm_code" 
                        value="<?php echo htmlspecialchars($confirm_code); ?>"
-                       placeholder="0123456789" required minlength="6" pattern="[a-zA-Z0-9]+">
+                       placeholder="コード再入力" required minlength="6" pattern="[a-zA-Z0-9]+">
                 
                 <div class="submit-container">
                     <button type="submit">確定</button>
