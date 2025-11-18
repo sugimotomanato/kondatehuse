@@ -33,11 +33,12 @@ try {
 body {
     margin: 0;
     padding: 0;
-    background-image: url('images/haikei2.jpg');
+    background-image: url('haikei2.jpg'); /* ← これが背景画像！ */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     font-family: "ヒラギノ角ゴ ProN", sans-serif;
+    text-align: center;
 }
 
 /* 全体中央寄せ */
@@ -46,14 +47,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 40px;
 }
 
-/* 検索ボックス */
+/* 検索ボックスエリア */
 .search-box {
     width: 85%;
     max-width: 380px;
-    margin-bottom: 10px;
+    margin-top: 120px;    /* ← ここで背景の上部に余白 */
+    margin-bottom: 20px;
 }
 
 .search-box input {
@@ -65,7 +66,6 @@ body {
     background: #fff;
 }
 
-/* 検索ボタン */
 .search-box button {
     margin-top: 5px;
     width: 100%;
@@ -77,7 +77,7 @@ body {
     font-size: 16px;
 }
 
-/* 白いカード（テーブル外枠） */
+/* 白カードエリア */
 .table-card {
     width: 90%;
     max-width: 380px;
@@ -85,6 +85,7 @@ body {
     border-radius: 12px;
     padding: 15px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    margin-bottom: 50px;
 }
 
 /* テーブル */
@@ -102,14 +103,14 @@ th, td {
 
 th {
     background: #f4f4f4;
-    font-weight: bold;
 }
 
 tr:last-child td {
     border-bottom: none;
 }
 </style>
-</head>
+
+
 <body>
 
 <div class="container">
@@ -120,32 +121,33 @@ tr:last-child td {
         <button id="searchBtn">検索</button>
     </div>
 
-    <!-- 白いカード（検索結果エリア） -->
+    <!-- 白カード テーブル -->
     <div class="table-card" id="tableArea">
 
-        <table>
-            <tr>
-                <th>家族コード</th>
-                <th>ユーザー名</th>
-            </tr>
+      <table>
+    <tr>
+        <th>ID</th>
+        <th>家族コード</th>
+        <th>ユーザー名</th>
+    </tr>
 
-            <?php foreach ($results as $row): ?>
-            <tr>
-                <td><?= htmlspecialchars($row["parent_account"]) ?></td>
-                <td><?= htmlspecialchars($row["user_name"]) ?></td>
-            </tr>
-            <?php endforeach; ?>
-
-        </table>
+    <?php foreach ($results as $row): ?>
+    <tr>
+        <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['parent_account_ID']) ?></a></td>
+        <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['parent_account']) ?></a></td>
+        <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['user_name']) ?></a></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
 
     </div>
 
 </div>
 
-<script>
-// AJAX検索処理
-document.getElementById('searchBtn').addEventListener('click', function() {
 
+<script>
+// AJAX検索
+document.getElementById('searchBtn').addEventListener('click', function() {
     const keyword = document.getElementById('keyword').value;
 
     fetch('search.php', {
@@ -155,9 +157,8 @@ document.getElementById('searchBtn').addEventListener('click', function() {
     })
     .then(res => res.text())
     .then(data => {
-        // tableArea 内の HTML を完全に差し替え
         document.getElementById('tableArea').innerHTML = data;
-    })
+    });
 });
 </script>
 
