@@ -12,12 +12,15 @@ $db_pass = '6group';
 $db_name = 'LAA1685019-kondatehausu';
 
 try {
-    $pdo = new PDO(
-        "mysql:host={$db_host};dbname={$db_name};charset=utf8",
-        $db_user, 
-        $db_pass,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
+$dsn = "mysql:host={$db_host};dbname=`{$db_name}`;charset=utf8";
+
+$pdo = new PDO(
+    $dsn,
+    $db_user,
+    $db_pass,
+    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+);
+
 
     // 🔍 user_name のみを検索
     $sql = "
