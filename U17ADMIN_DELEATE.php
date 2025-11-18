@@ -130,7 +130,7 @@ tr:last-child td {
         <th>家族コード</th>
         <th>ユーザー名</th>
     </tr>
-
+<tbody id="tableBody"> 
     <?php foreach ($results as $row): ?>
     <tr>
         <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['parent_account_ID']) ?></a></td>
@@ -157,9 +157,10 @@ document.getElementById('searchBtn').addEventListener('click', function() {
     })
     .then(res => res.text())
     .then(data => {
-        document.getElementById('tableArea').innerHTML = data;
+        document.getElementById('tableBody').innerHTML = data;
     });
 });
+
 </script>
 
 </body>
