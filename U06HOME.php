@@ -553,7 +553,7 @@
 
                 <!-- メニューリスト -->
                 <nav class="space-y-6 text-gray-700 text-lg font-semibold">
-                    <a href="U14LIST.php">買い物リスト
+                    <a href="U14MEMO.php">買い物リスト
                     </a>
                     <a href="#" class="block hover:text-primary-pink transition duration-150" onclick="showMessageBox('グループ削除画面へ遷移します。'); closeDrawer(); return false;">
                         グループ削除
