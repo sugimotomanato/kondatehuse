@@ -1,70 +1,70 @@
 <?php
-$errors = [];
-$db_host = 'mysql320.phy.lolipop.lan';
-$db_user = 'LAA1685019'; 
-$db_pass = '6group'; 
-$db_name = 'LAA1685019-kondatehausu'; 
+ob_start();
+session_start();
+// ================================================
+// ロリポップ MySQL 接続テスト（本番環境用）
+// ================================================
+ 
+$db_host = 'mysql320.phy.lolipop.lan';   // ロリポップのMySQLホスト
+$db_user = 'LAA1685019';    // データベースユーザー名
+$db_pass = '6group';                     // データベースパスワード
+$db_name = 'LAA1685019-kondatehausu';         // データベース名
+ 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+$ID = trim($_POST['system_ID'] ?? '');
+$pass = trim($_POST['system_password'] ?? '');
 
-    $ID = $_POST['system_ID'] ?? '';
-    $pass = $_POST['system_password'] ?? '';
+// ★ 半角英数字でなければエラー
+if (!preg_match('/^[a-zA-Z0-9]+$/', $ID)) {
+    $_SESSION['error'] = "IDは半角英数字で入力してください。";
+    header('Location: ./U15ADMIN_LOGIN.php');
+    exit();
+}
 
-    if (empty($ID) || empty($pass)) {
-        $errors[] = "IDまたはパスワードが未入力です。";
+    if ($ID === '' || $pass === '') {
+     $_SESSION['error'] = "IDとパスワードを入力してください。";
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
     }
 
-    if (empty($errors)) {
-        try {
-            $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
+                   $db_user, $db_pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ 
+ 
 
-            // IDで検索（数値のIDを使う）
-            $stmt = $pdo->prepare("SELECT * FROM system WHERE system_users_id = ?");
-            $stmt->execute([$ID]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  $stmt = $pdo->prepare("SELECT * FROM `system` WHERE BINARY `system_users_id` = ?");
+        $stmt->execute([$ID]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
-            $isValid = false;
-            if ($user && !empty($user['system_users_password'])) {
-                $stored_pass = $user['system_users_password'];
-            
-                // まず password_verify() でチェック（ハッシュ対応）
-                if (password_verify($pass, $stored_pass)) {
-                    $isValid = true;
-                }
-                // password_verify が false のとき、平文一致をチェック
-                elseif ($pass === $stored_pass) {
-                    $isValid = true;
-                }
+        $isValid = false;
+        if ($user && !empty($user['system_users_password'])) {
+            $stored_pass = trim($user['system_users_password']);
+            if (password_verify($pass, $stored_pass) || $pass === $stored_pass) {
+                $isValid = true;
             }
-
-            
-
-            if ($isValid === true) {
-                header('Location: complete.php');
-                exit();
-            } else {
-                $errors[] =  'ログイン失敗';
-            
-            }
-
-        } catch (PDOException $e) {
-              header('Location: ./U15ADMIN_LOGIN.php');
-                exit();
-                
-          
         }
-    }else{
-         header('Location: ./U15ADMIN_LOGIN.php');
-                exit();
+
+        if ($isValid) {
+            $_SESSION['admin_logged_in'] = true;
+            $_SESSION['admin_id'] = $ID;
+        } else {
+        $_SESSION['error'] = "ID またはパスワードが違います。";
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
+        }
+
+ 
+} catch (PDOException $e) {
+ error_log("DBエラー: " . $e->getMessage());
+        $_SESSION['error'] = "接続エラーが発生しました。";
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
     }
 }
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="ja">

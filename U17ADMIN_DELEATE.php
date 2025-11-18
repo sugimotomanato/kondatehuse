@@ -61,10 +61,11 @@ $stmt = $pdo->prepare("SELECT parent_account_ID, parent_account, user_name FROM 
 </style>
 </head>
 <body>
-    <img src="kondatehuse/haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
+        <img src="haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
     <h2 style="text-align:center;">ユーザー一覧</h2>
 <input type="text" id="keyword" placeholder="入力">
 <button id="searchBtn">検索</button>
+<a href="U16ADMIN_HOME.php">戻る ></a>
 <table>
     <tr>
         <th>ID</th>
