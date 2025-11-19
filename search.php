@@ -35,7 +35,7 @@ try {
     exit;
 }
 ?>
-
+<a href="U16ADMIN_HOME.php">戻る</a>
 <table border="1">
     <tr>
         <th>ID</th>

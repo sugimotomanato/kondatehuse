@@ -114,7 +114,7 @@ tr:last-child td {
 <body>
 
 <div class="container">
-
+<a href="U16ADMIN_HOME.php">戻る</a>
     <!-- 検索ボックス -->
     <div class="search-box">
         <input type="text" id="keyword" placeholder="検索">
