@@ -3,19 +3,15 @@ header('Content-Type: text/html; charset=UTF-8');
 
 $keyword = $_POST['keyword'] ?? '';
 
-$db_host = 'localhost';
-$db_user = 'LAA1685019';
-$db_pass = '6group';
-$db_name = 'LAA1685019-kondatehausu';
-
+$db_host = 'mysql320.phy.lolipop.lan';   // ロリポップのMySQLホスト
+$db_user = 'LAA1685019';    // データベースユーザー名
+$db_pass = '6group';                     // データベースパスワード
+$db_name = 'LAA1685019-kondatehausu';                 // データベース名
+ 
 try {
-    $pdo = new PDO(
-        "mysql:host={$db_host};dbname={$db_name};charset=utf8mb4",
-        $db_user,
-        $db_pass,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
-
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
+                   $db_user, $db_pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $sql = "
         SELECT parent_account_ID, parent_account, user_name
         FROM parent_account
