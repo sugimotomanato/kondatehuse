@@ -82,7 +82,7 @@ try {
       </style>
 </head>
 <body>
-    <img src="haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
+    <img src="haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;">
         <h1>献立家</h1>
 <a href="U17ADMIN_DELEATE.php">ユーザ退会処理 ></a>
 

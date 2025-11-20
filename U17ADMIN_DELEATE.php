@@ -1,120 +1,166 @@
 <?php
-// エラーメッセージを初期化
-$errors = [];
-$code = '';
-$name = '';
 // ==========================================================
-// データベース接続設定
+// DB接続
 // ==========================================================
 $db_host = 'mysql320.phy.lolipop.lan';
-$db_user = 'LAA1685019'; 
-$db_pass = '6group'; 
-$db_name = 'LAA1685019-kondatehausu'; 
+$db_user = 'LAA1685019';
+$db_pass = '6group';
+$db_name = 'LAA1685019-kondatehausu';
 
-    if (empty($errors)) {
-        try {
-            $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    $pdo = new PDO(
+        "mysql:host=$db_host;dbname=$db_name;charset=utf8",
+        $db_user,
+        $db_pass
+    );
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // 管理者を取得
-$stmt = $pdo->prepare("SELECT parent_account_ID, parent_account, user_name FROM parent_account");
-
-
-          $stmt->execute();
-
-
-    // 結果を配列で取得
+    $stmt = $pdo->prepare("SELECT parent_account_ID, parent_account, user_name FROM parent_account ORDER BY parent_account_ID ASC");
+    $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo "DB接続エラー: " . $e->getMessage();
-        }
-    }
+
+} catch (PDOException $e) {
+    echo "DB接続エラー: " . $e->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-    table {
-        border-collapse: collapse;
-        width: 60%;
-        margin: 20px auto;
-    }
-    th, td {
-        border: 1px solid #aaa;
-        padding: 8px 12px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-        body {
-          background-image: url('images/haikei2.jpg');
-          background-size: cover;      /* 画面全体にフィット */
-          background-position: center; /* 中央に配置 */
-          background-repeat: no-repeat;/* 繰り返さない */
-        }
-      
+<meta charset="UTF-8">
+<title>ユーザー一覧</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('haikei2.jpg'); /* ← これが背景画像！ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: "ヒラギノ角ゴ ProN", sans-serif;
+    text-align: center;
+}
+
+/* 全体中央寄せ */
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 検索ボックスエリア */
+.search-box {
+    width: 85%;
+    max-width: 380px;
+    margin-top: 120px;    /* ← ここで背景の上部に余白 */
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #777;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.search-box button {
+    margin-top: 5px;
+    width: 100%;
+    padding: 10px;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* 白カードエリア */
+.table-card {
+    width: 90%;
+    max-width: 380px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    margin-bottom: 50px;
+}
+
+/* テーブル */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    font-size: 15px;
+}
+
+th {
+    background: #f4f4f4;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
 </style>
-</head>
+
+
 <body>
-        <img src="haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
-    <h2 style="text-align:center;">ユーザー一覧</h2>
-<input type="text" id="keyword" placeholder="入力">
-<button id="searchBtn">検索</button>
-<a href="U16ADMIN_HOME.php">戻る ></a>
-<table>
+
+<div class="container">
+<a href="U16ADMIN_HOME.php">戻る</a>
+    <!-- 検索ボックス -->
+    <div class="search-box">
+        <input type="text" id="keyword" placeholder="検索">
+        <button id="searchBtn">検索</button>
+    </div>
+
+    <!-- 白カード テーブル -->
+    <div class="table-card" id="tableArea">
+
+      <table>
     <tr>
         <th>ID</th>
         <th>家族コード</th>
         <th>ユーザー名</th>
     </tr>
+<tbody id="tableBody"> 
+    <?php foreach ($results as $row): ?>
+    <tr>
+        <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['parent_account_ID']) ?></a></td>
+        <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['parent_account']) ?></a></td>
+        <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['user_name']) ?></a></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
 
-    <?php if (!empty($results)): ?>
-        <?php foreach ($results as $row): ?>
-        <tr>
-       <td>
-                    <a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>">
-                        <?= htmlspecialchars($row['parent_account_ID'], ENT_QUOTES, 'UTF-8') ?>
-                    </a>
-                </td>
-                <td>
-                    <a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>">
-                        <?= htmlspecialchars($row['parent_account'], ENT_QUOTES, 'UTF-8') ?>
-                    </a>
-                </td>
-                <td>
-                    <a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>">
-                        <?= htmlspecialchars($row['user_name'], ENT_QUOTES, 'UTF-8') ?>
-                    </a>
-                </td>
-        </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr><td colspan="3">データがありません。</td></tr>
-    <?php endif; ?>
+    </div>
+
+</div>
+
 
 <script>
-// 🔍 検索ボタンクリック時の処理
+// AJAX検索
 document.getElementById('searchBtn').addEventListener('click', function() {
     const keyword = document.getElementById('keyword').value;
 
     fetch('search.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: 'keyword=' + encodeURIComponent(keyword)
     })
-    .then(response => response.text())
+    .then(res => res.text())
     .then(data => {
-        document.getElementById('tableArea').innerHTML = data; // 結果を表エリアに差し替え
-    })
-    .catch(error => console.error('Error:', error));
+        document.getElementById('tableBody').innerHTML = data;
+    });
 });
+
 </script>
 
-</table>
 </body>
-</html>
