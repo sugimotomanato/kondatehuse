@@ -1,6 +1,6 @@
 <?php
-session_start();
-// ハッシュを読み込む
+ob_start();
+session_start();// ハッシュを読み込む
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
  $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
