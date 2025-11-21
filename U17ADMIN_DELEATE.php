@@ -15,7 +15,7 @@ try {
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->prepare("SELECT parent_account_ID, parent_account, user_name FROM parent_account ORDER BY parent_account_ID ASC");
+    $stmt = $pdo->prepare("SELECT parent_account_ID, family_code, user_name FROM parent_account ORDER BY parent_account_ID ASC");
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
