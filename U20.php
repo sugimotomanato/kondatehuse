@@ -10,12 +10,8 @@ try{
 
     // パスワード検証
     if (password_verify($pass, $hash)) {
-
         // セッションにログイン状態を保存
         $_SESSION['logged_in'] = true;
-
-       
-
     } else {
         $_SESSION['error'] = "パスワードが違います。";
          // ログイン失敗
