@@ -9,7 +9,7 @@ $db_name = 'LAA1685019-kondatehausu';
 
 try {
     $pdo = new PDO(
-        "mysql:host=$db_host;dbname=$db_name;charset=utf8",
+        "mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
         $db_user,
         $db_pass
     );

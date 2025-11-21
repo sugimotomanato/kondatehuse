@@ -10,6 +10,7 @@
 
             <form action="U20.php" method="post">
         <input type="password" name="system_password" id="">
+        <button type="submit">次へ</button>
     </form>
 </form>
 </body>
