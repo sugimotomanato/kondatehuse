@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config.php'; // ハッシュを読み込む
+// ハッシュを読み込む
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 define('SYSTEM_PASSWORD_HASH', 'aso230'); // ここに保存
