@@ -1,3 +1,9 @@
+
+<?php
+session_start();
+$error = $_SESSION['error'] ?? '';
+unset($_SESSION['error']); // 1回表示したら消す
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>

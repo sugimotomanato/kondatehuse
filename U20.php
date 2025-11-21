@@ -3,13 +3,13 @@ session_start();
 // ハッシュを読み込む
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-define('SYSTEM_PASSWORD_HASH', 'aso230'); // ここに保存
-
+ $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
+try{
 
     $pass = trim($_POST['system_password'] ?? '');
 
     // パスワード検証
-    if (password_verify($pass, SYSTEM_PASSWORD_HASH)) {
+    if (password_verify($pass, $hash)) {
 
         // セッションにログイン状態を保存
         $_SESSION['logged_in'] = true;
@@ -17,10 +17,17 @@ define('SYSTEM_PASSWORD_HASH', 'aso230'); // ここに保存
        
 
     } else {
-        $error = "パスワードが違います。";
+        $_SESSION['error'] = "パスワードが違います。";
          // ログイン失敗
         header("Location: ./U19ADMIN_MAKE.php");
         exit();
+    }
+
+}catch (PDOException $e) {
+ error_log("エラー: " . $e->getMessage());
+        $_SESSION['error'] = "接続エラーが発生しました。";
+     header("Location: ./U19ADMIN_MAKE.php");
+             exit();
     }
 }
 ?>
