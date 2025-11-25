@@ -140,7 +140,7 @@ function renderFamilyIcon($member) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>U06ホーム</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+　　<script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* 【修正点】bodyとmainにFlexboxを適用し、スクロールを無効化 */
         body {
@@ -161,9 +161,9 @@ function renderFamilyIcon($member) {
             
             /* 背景画像の設定をmainに移動 */
             background-image: url('haikei1.jpg'); 
-            background-size: cover;
-            background-position: center;
-            background-color: white; /* 背景画像がない場合のフォールバック */
+            background-attachment: fixed;;
+            background-position: center;
+            background-color: white; /* 背景画像がない場合のフォールバック */
         }
     </style>
     <script>
@@ -171,7 +171,7 @@ function renderFamilyIcon($member) {
             theme: {
                 extend: {
                     colors: {
-                        'primary-red': '#ef4444', 
+                        'primary-red': '#090909ff', 
                     },
                 }
             }
@@ -285,6 +285,7 @@ function renderFamilyIcon($member) {
             </div>
 
             <?php 
+
             $favorite_recipes_dummy = array_slice($recipes, 0, 2); 
             renderSection('お気に入り', $favorite_recipes_dummy);
             ?>
@@ -332,7 +333,7 @@ function renderFamilyIcon($member) {
 
     <div id="notification-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-sm">
-            <h2 class="text-xl font-bold mb-4">通知一覧 (U07NOTIF.phpの内容を表示)</h2>
+            <h2 class="text-xl font-bold mb-4">通知一覧 (の内容を表示)</h2>
             <p class="text-sm text-gray-600">新しいいいねが3件あります。</p>
             <p class="text-sm text-gray-600">ハンバーグ定食がカレンダーに追加されました。</p>
             <button onclick="document.getElementById('notification-modal').classList.add('hidden')" class="mt-4 text-red-600 font-medium">閉じる</button>
