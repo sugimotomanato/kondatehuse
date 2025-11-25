@@ -9,13 +9,13 @@ $db_name = 'LAA1685019-kondatehausu';
 
 try {
     $pdo = new PDO(
-        "mysql:host=$db_host;dbname=$db_name;charset=utf8",
+        "mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
         $db_user,
         $db_pass
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->prepare("SELECT parent_account_ID, parent_account, user_name FROM parent_account ORDER BY parent_account_ID ASC");
+    $stmt = $pdo->prepare("SELECT parent_account_ID, family_code, user_name FROM parent_account ORDER BY parent_account_ID ASC");
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -134,7 +134,7 @@ tr:last-child td {
     <?php foreach ($results as $row): ?>
     <tr>
         <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['parent_account_ID']) ?></a></td>
-        <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['parent_account']) ?></a></td>
+        <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['family_code']) ?></a></td>
         <td><a href="U18ADMIN_DELEATE_LAST.php?id=<?= urlencode($row['parent_account_ID']) ?>"><?= htmlspecialchars($row['user_name']) ?></a></td>
     </tr>
     <?php endforeach; ?>

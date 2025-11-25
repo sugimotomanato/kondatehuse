@@ -13,7 +13,7 @@ try {
                    $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $sql = "
-        SELECT parent_account_ID, parent_account, user_name
+        SELECT parent_account_ID, family_code, user_name
         FROM parent_account
         WHERE user_name LIKE :keyword
         ORDER BY parent_account_ID ASC
@@ -33,7 +33,7 @@ if (!empty($results)) {
     foreach ($results as $row) {
         echo "<tr>
             <td><a href='U18ADMIN_DELEATE_LAST.php?id=" . urlencode($row['parent_account_ID']) . "'>" . htmlspecialchars($row['parent_account_ID']) . "</a></td>
-            <td><a href='U18ADMIN_DELEATE_LAST.php?id=" . urlencode($row['parent_account_ID']) . "'>" . htmlspecialchars($row['parent_account']) . "</a></td>
+            <td><a href='U18ADMIN_DELEATE_LAST.php?id=" . urlencode($row['parent_account_ID']) . "'>" . htmlspecialchars($row['family_code']) . "</a></td>
             <td><a href='U18ADMIN_DELEATE_LAST.php?id=" . urlencode($row['parent_account_ID']) . "'>" . htmlspecialchars($row['user_name']) . "</a></td>
         </tr>";
     }
