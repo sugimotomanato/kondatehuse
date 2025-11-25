@@ -28,6 +28,7 @@ $email = htmlspecialchars($_POST['email'], ENT_QUOTES);
 
 <h2>入力内容の確認</h2>
 
+
 <p>管理者名：<?= $name ?></p>
 <p>パスワード：<?= $password ?></p>
 <p>メールアドレス：<?= $email ?></p>
