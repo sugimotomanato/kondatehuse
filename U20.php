@@ -34,22 +34,31 @@ try{
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>管理者登録フォーム</title>
 </head>
 <body>
-  <form action="U20" method="post">
-        <label for="">
-        管理者名
-        <p><input type="text" name="ID" id=""></p>
-        </label>
-        <label for="">
-        パスワード（半角英数8文字以上）
-       <p><input type="password" name="passward" id=""></p> 
-        </label>
-        <label for="">
-        メールアドレス
-       <p><input type="email" name="email" id=""></p> 
-        </label>
-        <button type="submit">登録</button>
+
+<h2>管理者登録</h2>
+
+<form action="confirm.php" method="post">
+
+    <label for="admin-id">管理者名</label>
+    <p><input type="text" name="name" id="admin-id"
+              value="<?= htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES); ?>"
+              required></p>
+
+    <label for="password">パスワード（半角英数8文字以上）</label>
+    <p><input type="password" name="password" id="password" minlength="8"
+              required></p>
+
+    <label for="email">メールアドレス</label>
+    <p><input type="email" name="email" id="email"
+              value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES); ?>"
+              required></p>
+
+    <button type="submit">確認する</button>
+</form>
+
 </body>
 </html>
+
