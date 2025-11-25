@@ -23,6 +23,18 @@ $email = htmlspecialchars($_POST['email'], ENT_QUOTES);
 <head>
     <meta charset="UTF-8">
     <title>入力内容確認</title>
+        <style>
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('haikei2.jpg'); /* ← これが背景画像！ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: "ヒラギノ角ゴ ProN", sans-serif;
+    text-align: center;
+}
+      </style>
 </head>
 <body>
 

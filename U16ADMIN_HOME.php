@@ -73,16 +73,19 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        body {
-          background-image: url('images/haikei2.jpg');
-          background-size: cover;      /* 画面全体にフィット */
-          background-position: center; /* 中央に配置 */
-          background-repeat: no-repeat;/* 繰り返さない */
-        }
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('haikei2.jpg'); /* ← これが背景画像！ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: "ヒラギノ角ゴ ProN", sans-serif;
+    text-align: center;
+}
       </style>
 </head>
 <body>
-    <img src="haikei2.jpg" alt="料理の写真" width="400" style="margin-top: 120px; margin-bottom: 120px;">
         <h1>献立家</h1>
 <a href="U17ADMIN_DELEATE.php">ユーザ退会処理 ></a>
 
