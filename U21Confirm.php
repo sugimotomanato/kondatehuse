@@ -2,10 +2,6 @@
 ob_start();
 session_start();// ハッシュを読み込む
 // エラーメッセージを初期化
-$errors = [];
-$code = '';
-$name = '';
-$complete_page = 'complete.php'; 
 
 // ==========================================================
 // データベース接続設定 (ロリポップ情報とDB設計を統合)
@@ -21,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 $name = htmlspecialchars($_POST['name'], ENT_QUOTES);
 $password = htmlspecialchars($_POST['password'], ENT_QUOTES);
 $email = htmlspecialchars($_POST['email'], ENT_QUOTES);
+$mail = $email;
 
 // ★ 半角英数字でなければエラー
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -39,7 +36,7 @@ try {
   $stmt = $pdo->prepare("SELECT * FROM `system` WHERE BINARY `email` = ?");
         $stmt->execute([$email]);
             if ($stmt->fetch()) {
-                $errors[] = "このアカウントは既に登録されています。別のアカウントを入力してください。";
+                $_SESSION['error']  = "このアカウントは既に登録されています。別のアカウントを入力してください。";
                     header('Location: ./U20.php');
                     exit();
             }
@@ -50,7 +47,7 @@ try {
 } catch (PDOException $e) {
  error_log("DBエラー: " . $e->getMessage());
         $_SESSION['error'] = "接続エラーが発生しました。";
-        header('Location: ./U15ADMIN_LOGIN.php');
+        header('Location: ./U19ADMIN_MAKE.php');
         exit();
     }
 }
@@ -88,7 +85,7 @@ body {
 <!-- 戻るボタン -->
 <form action="U20.php" method="post">
     <input type="hidden" name="name" value="<?= htmlspecialchars($name, ENT_QUOTES); ?>">
-    <input type="hidden" name="email" value="<?= htmlspecialchars($email, ENT_QUOTES); ?>">
+    <input type="hidden" name="email" value="<?= htmlspecialchars($mail, ENT_QUOTES); ?>">
     <input type="hidden" name="password" value="<?= htmlspecialchars($password, ENT_QUOTES); ?>">
     <button type="submit">戻る</button>
 </form>
@@ -96,7 +93,7 @@ body {
 <!-- 登録ボタン -->
 <form action="U22Done.php" method="post">
     <input type="hidden" name="name" value="<?= htmlspecialchars($name, ENT_QUOTES); ?>">
-    <input type="hidden" name="email" value="<?= htmlspecialchars($email, ENT_QUOTES); ?>">
+    <input type="hidden" name="email" value="<?= htmlspecialchars($mail, ENT_QUOTES); ?>">
     <input type="hidden" name="password" value="<?= htmlspecialchars($password, ENT_QUOTES); ?>">
     <button type="submit">登録する</button>
 </form>
