@@ -1,6 +1,8 @@
 <?php
 ob_start();
 session_start();// ハッシュを読み込む
+$error = $_SESSION['error'] ?? '';
+unset($_SESSION['error']); // 1回表示したら消す
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
  $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
@@ -46,9 +48,17 @@ body {
     font-family: "ヒラギノ角ゴ ProN", sans-serif;
     text-align: center;
 }
+  .error {
+          color: red;
+          font-size: 18px;
+          margin: 10px 0;
+        }
       </style>
 </head>
 <body>
+        <?php if ($error): ?>
+        <p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+    <?php endif; ?>
 
 <h2>管理者登録</h2>
 
@@ -61,6 +71,7 @@ body {
 
     <label for="password">パスワード（半角英数8文字以上）</label>
     <p><input type="password" name="password" id="password" minlength="8"
+    value="<?= htmlspecialchars($_POST['password'] ?? '', ENT_QUOTES); ?>"
               required></p>
 
     <label for="email">メールアドレス</label>
