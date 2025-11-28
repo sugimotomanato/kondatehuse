@@ -13,76 +13,71 @@ require __DIR__ . '/phpmailer/src/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
+session_regenerate_id(true);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $name = htmlspecialchars($_POST['name'], ENT_QUOTES);
-    $password = htmlspecialchars($_POST['password'], ENT_QUOTES);
-    $email = htmlspecialchars($_POST['email'], ENT_QUOTES);
+    $name     = trim($_POST['name']);
+    $password = trim($_POST['password']);
+    $email    = trim($_POST['email']);
 
-    $na=$name;
-    $pass=$password;
-    $ma=$email;
-
-    $n=$name;
-    $p=$password;
-    $m=$email;
-
+    if ($name === '' || $email === '' || $password === '') {
+    $_SESSION['error'] = '全ての項目を入力してください。';
+    header('Location: ./U20.php');
+    exit();
+}
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['error'] = "メールアドレスの形式が間違っています。";
         header('Location: ./U20.php');
         exit();
     }
+    
+if (mb_strlen($password) < 8) {
+    $_SESSION['error'] = 'パスワードは8文字以上で入力してください。';
+    header('Location: ./U20.php');
+    exit();
+}
 
     try {
         $pdo = new PDO(
             "mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
-            $db_user, $db_pass,
+            $db_user, 
+            $db_pass,
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
 
-        // DB登録処理
+        // パスワードをハッシュ化（必須）
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        // DB登録
         $stmt = $pdo->prepare("
             INSERT INTO system (system_users_name, system_users_password, email)
             VALUES (?, ?, ?)
         ");
+        $stmt->execute([$name, $hash, $email]);
 
-        $stmt->execute([$name, $password, $email]);
+        // 登録されたユーザーID
+        $ID = $pdo->lastInsertId();
 
-          $stm = $pdo->prepare("
-            SELECT * FROM `system` WHERE `email` = ?
-        ");
-                $stm->execute([$m]);
-        $user = $stm->fetch(PDO::FETCH_ASSOC);
-        $ID=$user['system_users_id'];
+        // メール送信
+        $mail = new PHPMailer(true);
 
-        // ★ ロリポップ共用メールでメール送信する ★
-              $mail = new PHPMailer();  
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.lolipop.jp';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'info@aso2301200.fem.jp';
+        $mail->Password   = 'x5616zhF0Qc8G_-g';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port       = 465;
+        $mail->CharSet    = 'UTF-8';
+        $mail->Encoding   = 'base64';
 
+        $mail->setFrom('info@aso2301200.fem.jp', 'KondateHause 管理システム');
+        $mail->addAddress($email, $name);
 
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.lolipop.jp';
-            $mail->SMTPAuth   = true;
-
-            // 🔥 あなた専用 SMTP アカウント
-            $mail->Username   = 'info@aso2301200.fem.jp';
-            $mail->Password   = 'x5616zhF0Qc8G_-g';
-
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port       = 465;
-            $mail->CharSet    = 'UTF-8';
-            $mail->Encoding   = 'base64';
-
-            // 差出人（あなたのメール）
-            $mail->setFrom('info@aso2301200.fem.jp', 'KondateHause 管理システム');
-
-            // 宛先（登録ユーザー）
-            $mail->addAddress($ma, $n);
-
-            $mail->Subject = '管理者アカウント登録完了のお知らせ';
-            $mail->Body = 
+        $mail->Subject = '管理者アカウント登録完了のお知らせ';
+        $mail->Body = 
 "{$name} 様
 
 管理者アカウントの登録が完了しました。
@@ -97,16 +92,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ご利用ありがとうございます。
 KondateHause 管理システム";
 
-            $mail->send();
+        $mail->send();
 
+    } catch (Exception $e) {
+    error_log('メール送信エラー: ' . $mail->ErrorInfo);
+    $_SESSION['error'] = 'メール送信に失敗しました。再度お試しください。';
+            header('Location: ./U19ADMIN_MAKE.php');
+        exit();
     } catch (PDOException $e) {
         error_log("DBエラー: " . $e->getMessage());
         $_SESSION['error'] = "接続エラーが発生しました。";
         header('Location: ./U19ADMIN_MAKE.php');
         exit();
     }
+}else{
+        header('Location: ./U19ADMIN_MAKE.php');
+    exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ja">
