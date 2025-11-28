@@ -49,7 +49,7 @@ if (mb_strlen($password) < 8) {
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
         // DB登録
-        $stmt = $pdo->prepare("INSERT INTO system (system_users_name, system_users_password, email)
+        $stmt = $pdo->prepare("INSERT INTO `system` (`system_users_name`, `system_users_password`, `email`)
             VALUES (?, ?, ?)");
         $stmt->execute([$name, $hash, $email]);
 
