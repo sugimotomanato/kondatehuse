@@ -5,7 +5,7 @@ session_start();
 $db_host = 'mysql320.phy.lolipop.lan';   // ロリポップのMySQLホスト
 $db_user = 'LAA1685019';    // データベースユーザー名
 $db_pass = '6group';                     // データベースパスワード
-$db_name = 'LAA1685019-kondatehausu';         // データベース名
+$db_name = 'LAA1685019-kondatehausu';                 // データベース名
 
 require __DIR__ . '/phpmailer/src/Exception.php';
 require __DIR__ . '/phpmailer/src/PHPMailer.php';
@@ -40,7 +40,7 @@ if (mb_strlen($password) < 8) {
 }
 
     try {
-        $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
                    $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
  
