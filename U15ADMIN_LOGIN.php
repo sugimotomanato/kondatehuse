@@ -10,12 +10,16 @@ unset($_SESSION['error']); // 1回表示したら消す
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理者ログイン</title>
     <style>
-        body {
-          background-image: url('images/haikei2.jpg');
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-        }
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('haikei2.jpg'); /* ← これが背景画像！ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: "ヒラギノ角ゴ ProN", sans-serif;
+    text-align: center;
+}
         .error {
           color: red;
           font-size: 18px;
@@ -24,8 +28,6 @@ unset($_SESSION['error']); // 1回表示したら消す
     </style>
 </head>
 <body>
-
-    <img src="haikei2.jpg" width="400" style="margin-top: 120px; margin-bottom: 120px;"><br>
 
     <?php if ($error): ?>
         <p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>

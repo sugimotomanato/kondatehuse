@@ -1,7 +1,12 @@
 <?php
 ob_start();
 session_start();// ハッシュを読み込む
+$error = $_SESSION['error'] ?? '';
+unset($_SESSION['error']); // 1回表示したら消す
 
+if (!empty($_SESSION['logged_in'])) {
+    // 何もしない → 後続の U20 のフォーム表示へ
+} else {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
  $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
 try{
@@ -26,6 +31,7 @@ try{
              exit();
     }
 }
+}
 ?>
 
 
@@ -35,12 +41,32 @@ try{
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理者登録フォーム</title>
+        <style>
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('haikei2.jpg'); /* ← これが背景画像！ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: "ヒラギノ角ゴ ProN", sans-serif;
+    text-align: center;
+}
+  .error {
+          color: red;
+          font-size: 18px;
+          margin: 10px 0;
+        }
+      </style>
 </head>
 <body>
+        <?php if ($error): ?>
+        <p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+    <?php endif; ?>
 
 <h2>管理者登録</h2>
 
-<form action="confirm.php" method="post">
+<form action="U21Confirm.php" method="post">
 
     <label for="admin-id">管理者名</label>
     <p><input type="text" name="name" id="admin-id"
@@ -49,6 +75,7 @@ try{
 
     <label for="password">パスワード（半角英数8文字以上）</label>
     <p><input type="password" name="password" id="password" minlength="8"
+    value="<?= htmlspecialchars($_POST['password'] ?? '', ENT_QUOTES); ?>"
               required></p>
 
     <label for="email">メールアドレス</label>

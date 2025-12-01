@@ -11,11 +11,15 @@ unset($_SESSION['error']); // 1回表示したら消す
     <title>Document</title>
     <style>
         body {
-          background-image: url('images/haikei2.jpg');
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-        }
+    margin: 0;
+    padding: 0;
+    background-image: url('haikei2.jpg'); /* ← これが背景画像！ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: "ヒラギノ角ゴ ProN", sans-serif;
+    text-align: center;
+}
         .error {
           color: red;
           font-size: 18px;
