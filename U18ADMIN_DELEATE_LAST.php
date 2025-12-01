@@ -59,9 +59,9 @@ try {
 <body>
     <h1>削除しますか？</h1>
 
-    <p>ID： <?= htmlspecialchars($delete_data['parent_account_ID'], ENT_QUOTES, 'UTF-8') ?></p>
-    <p>家族コード： <?= htmlspecialchars($delete_data['family_code'], ENT_QUOTES, 'UTF-8') ?></p>
-    <p>ユーザー名： <?= htmlspecialchars($delete_data['user_name'], ENT_QUOTES, 'UTF-8') ?></p>
+    <p>ID： <?= htmlspecialchars($delete_data['parent_account_ID']) ?></p>
+    <p>家族コード： <?= htmlspecialchars($delete_data['family_code']) ?></p>
+    <p>ユーザー名： <?= htmlspecialchars($delete_data['user_name']) ?></p>
 
 
 
