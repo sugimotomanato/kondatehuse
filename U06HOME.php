@@ -1,3 +1,43 @@
+<?php
+// U06HOME.php
+
+// 1. データベース接続設定
+$db_host = 'mysql320.phy.lolipop.lan';
+$db_user = 'LAA1685019';
+$db_pass = '6group';
+$db_name = 'LAA1685019-kondatehausu';
+
+// 【登録】カードの初期値（データがない場合のデフォルト表示：鮭定食）
+$latest_title = "【登録】鮭定食"; 
+$latest_image = "teisyoku/sake.jpg"; 
+$latest_id = 7; 
+
+try {
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // 2. 最新のレシピを1件取得 (IDが一番大きいもの)
+    $sql = "SELECT recipe_id, title, image_path FROM recipe ORDER BY recipe_id DESC LIMIT 1";
+    $stmt = $pdo->query($sql);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // 3. データがあれば変数を上書き
+    if ($row) {
+        $latest_title = "【登録】" . htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8');
+        $latest_id = htmlspecialchars($row['recipe_id'], ENT_QUOTES, 'UTF-8');
+        
+        // 画像がある場合のみパスを更新
+        if (!empty($row['image_path'])) {
+            $latest_image = htmlspecialchars($row['image_path'], ENT_QUOTES, 'UTF-8');
+        }
+    }
+
+} catch (PDOException $e) {
+    // エラー時はデフォルト(鮭定食)のまま
+}
+?>
+<!DOCTYPE html>
+<html lang="ja">
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -31,7 +71,7 @@
         .main-content {
             padding-bottom: 200px; 
             min-height: calc(100vh - 72px);
-            background-image: url('haikei1.jpg'); 
+            background-image: url('haikei.jpg'); 
             background-size: cover;
             background-position: center;
             background-attachment: scroll; 
@@ -120,7 +160,7 @@
 
                 <div id="popular-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="1">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('hanba-gu.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/hanba-gu.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
                             <p class="text-xs text-gray-500">レシピや詳細</p>
@@ -134,7 +174,7 @@
                         </div>
                     </div>
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="2">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('karaage.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/karaage.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">唐揚げ定食</h3>
                             <p class="text-xs text-gray-500">レシピや詳細</p>
@@ -148,7 +188,7 @@
                         </div>
                     </div>
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="3">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('sashimi.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/sashimi.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">刺身定食</h3>
                             <p class="text-xs text-gray-500">レシピや詳細</p>
@@ -170,7 +210,7 @@
                 </h2>
                 <div id="favorite-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="4">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('gyouza.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/gyouza.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">餃子定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
@@ -185,7 +225,7 @@
                         </div>
                     </div>
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="5">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('saba.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/saba.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">鯖定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
@@ -200,7 +240,7 @@
                         </div>
                     </div>
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="6">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('nikunoyasai.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/nikunoyasai.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">肉の野菜炒め定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
@@ -222,16 +262,18 @@
                     <a href="U07CARENDER.php" class="text-sm font-normal text-primary-pink ml-2 hover:underline">&gt;</a>
                 </h2>
                 <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="7">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('/sake.jpg'); background-size: cover;"></div>
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">本日2(火)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">【登録】鮭定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
+                    <div class="flex-shrink-0 meal-card relative" data-meal-id="<?php echo $latest_id; ?>">
+    <div class="h-2/3 bg-gray-200" style="background-image: url('<?php echo $latest_image; ?>'); background-size: cover; background-position: center;"></div>
+    
+    <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">本日2(火)</span>
+    
+    <div class="p-2">
+        <h3 class="font-semibold text-gray-800 text-sm truncate"><?php echo $latest_title; ?></h3>
+        <p class="text-xs text-gray-500">レシピや評価</p>
+    </div>
+</div>
                     <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('gyoutan.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/gyoutan.jpg'); background-size: cover;"></div>
                         <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">本日2(火)</span>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">【提案】牛タン定食</h3>
