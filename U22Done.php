@@ -85,6 +85,11 @@ if (mb_strlen($password) < 8) {
 メールアドレス：{$email}
 ━━━━━━━━━━━━━━
 
+<p>
+ログインはこちらから：<br>
+<a href='https://aso2301200.fem.jp/U15ADMIN_LOGIN.php'>https://aso2301200.fem.jp/U15ADMIN_LOGIN.php</a>
+</p>
+
 ご利用ありがとうございます。
 KondateHause 管理システム";
 
