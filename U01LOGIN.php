@@ -1,12 +1,18 @@
 <?php
 session_start();
+
 $error = "";
+$db_host = 'mysql320.phy.lolipop.lan';
+$db_user = 'LAA1685019-kondatehausu'; 
+$db_pass = '6group'; 
+$db_name = 'LAA1685019';
+
 if($_Server["REQUEST_METHOD"] === "POST") {
-    $name = $_POST["name"] ?? "";
-    $familly_code = $_POST["family_code"] ?? "";
+    $name = $_POST["user_name"] ?? "";
+    $familly_code = $_POST["parent_account"] ?? "";
     if ($name && $family_code) {
-        $_SESSION["name"] =$name;
-        $_SESSION["family_code"] = $family_code;
+        $_SESSION["user_name"] =$name;
+        $_SESSION["parent_account"] = $family_code;
         header("Location: home.php");
         exit;
     }else {
@@ -36,7 +42,7 @@ if($_Server["REQUEST_METHOD"] === "POST") {
             border-radius: 10px;
             box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
             width: 300px;
-            text-align: center; 
+            text-align: center;
         }
         .title {
             font-size: 28px;
@@ -105,9 +111,9 @@ if($_Server["REQUEST_METHOD"] === "POST") {
                         <?php if ($error): ?>
                         <p class="error"><?= htmlspecialchars($error) ?></p>
                  <?php endif; ?>
-                 <input type="text" name="name" placeholder="名前を入力">
+                 <input type="text" name="user_name" placeholder="名前を入力">
                 <label>家族コードを入力</label>
-                <input type="text" name="family_code" placeholder="家族コードを入力">
+                <input type="text" name="parent_account" placeholder="家族コードを入力">
                 <button type="submit" class="button">申請する</button>
                 </from>
                 </div>
