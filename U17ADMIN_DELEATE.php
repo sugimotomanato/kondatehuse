@@ -1,4 +1,8 @@
 <?php
+ob_start();
+session_start();// ハッシュを読み込む
+$error = $_SESSION['error'] ?? '';
+unset($_SESSION['error']); // 1回表示したら消す
 // ==========================================================
 // DB接続
 // ==========================================================
@@ -108,11 +112,18 @@ th {
 tr:last-child td {
     border-bottom: none;
 }
+  .error {
+          color: red;
+          font-size: 18px;
+          margin: 10px 0;
+        }
 </style>
 
 
 <body>
-
+        <?php if ($error): ?>
+        <p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+    <?php endif; ?>
 <div class="container">
 <a href="U16ADMIN_HOME.php">戻る</a>
     <!-- 検索ボックス -->
