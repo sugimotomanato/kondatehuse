@@ -380,7 +380,7 @@
             // 💡 補足: 検索キーワードをURLパラメータとして渡す場合は以下の形式を使います。
             // const destinationUrl = `U13KENSAKU.php?q=${encodeURIComponent(searchTerm)}`;
             
-            const destinationUrl = "U13.php";
+            const destinationUrl = "U12KENSAKU.php";
             
             console.log(`U13.phpへ遷移を開始します... (検索語: ${searchTerm})`);
             

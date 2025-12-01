@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <?php
 // delete_account.php から POST で家族コードを受け取る
 $code = $_POST['family_code'] ?? '';
@@ -6,7 +6,7 @@ $confirm_code = $_POST['confirm_code'] ?? '';
 
 // 不正なアクセスやコード未入力の場合は、入力画面に戻す
 if (empty($code) || $code !== $confirm_code) {
-    header("Location: U04.php");
+    header("Location: U04DELEATE.php");
     exit;
 }
 
@@ -97,17 +97,16 @@ $safe_confirm_code = htmlspecialchars($confirm_code);
             </p>
             
             <div class="button-group">
-                <form method="post" action="U01.php">
+                <form method="post" action="U01LOGIN.php">
                     <input type="hidden" name="family_code" value="<?php echo $safe_code; ?>">
                     <input type="hidden" name="confirm_code" value="<?php echo $safe_confirm_code; ?>">
-                    <button type="submit" class="button-style btn-ok">大丈夫です</button>
+                    <button type="submit" class="button-style btn-ok">削除する</button>
                 </form>
 
-                <a href="U01.php" class="button-style btn-cancel">やめておく</a>
+                <a href="U06HOME.php" class="button-style btn-cancel">やめておく</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-=======
->>>>>>> 04801d40ba077c821c46427cd64186129328a1c3
+

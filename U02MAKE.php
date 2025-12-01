@@ -3,7 +3,7 @@
 $errors = [];
 $code = '';
 $name = '';
-$complete_page = 'U03.php'; 
+$complete_page = 'U03MAKE_LAST.php'; 
 
 // ==========================================================
 // データベース接続設定
@@ -153,20 +153,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
             <?php endif; ?>
 
-            <form method="post" action="U02.php">
+            <form method="post" action="U02MAKE.php">
                 <label for="parent_account">家族コードを作成（6文字英数以上）</label>
                 <input type="text" id="parent_account" name="parent_account" 
                         value="<?php echo htmlspecialchars($code); ?>" 
-                        placeholder="A11111" required minlength="6" pattern="[a-zA-Z0-9]+">
+                        placeholder="コード作成入力" required minlength="6" pattern="[a-zA-Z0-9]+">
 
                 <label for="confirm_parent_account">家族コードの再入力</label>
                 <input type="text" id="confirm_parent_account" name="confirm_parent_account" 
-                        placeholder="0123456789" required minlength="6" pattern="[a-zA-Z0-9]+">
+                        placeholder="コード再入力" required minlength="6" pattern="[a-zA-Z0-9]+">
                 
                 <label for="user_name">名前</label>
                 <input type="text" id="user_name" name="user_name" 
                         value="<?php echo htmlspecialchars($name); ?>" 
-                        placeholder="杉本学徒" required maxlength="50">
+                        placeholder="名前入力" required maxlength="50">
                 
                 <div class="submit-container">
                     <button type="submit">→ </button>
