@@ -44,6 +44,7 @@ body {
     </form>
 
     <a href="U19ADMIN_MAKE.php">管理者登録はこちら</a>
+       <a href="U25.php">パスワード再設定はこちら</a>
 
 </body>
 </html>
