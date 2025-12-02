@@ -6,7 +6,7 @@ $db_name = 'LAA1685019-kondatehausu';         // データベース名
  
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
+    $email = $_POST['email'] ?? '';
 
     try {
 // DB接続（PDO）
@@ -20,20 +20,21 @@ $stmt->execute([':email' => $email]);
 $user = $stmt->fetch();
 
 if ($user) {
-    $token = bin2hex(random_bytes(32));
-    $expires = date("Y-m-d H:i:s", time() + 3600);
+   $token = bin2hex(random_bytes(32));
+$tokenHash = password_hash($token, PASSWORD_DEFAULT); // 保存用ハッシュ
+$expires = date("Y-m-d H:i:s", time() + 3600);
 
-    $stmt = $pdo->prepare("
-        INSERT INTO password_resets (system_users_id, token, expires_at)
-        VALUES (:uid, :token, :expires)
-    ");
-    $stmt->execute([
-        ':uid' => $user['system_users_id'],
-        ':token' => $token,
-        ':expires' => $expires
-    ]);
+$stmt = $pdo->prepare("
+    INSERT INTO password_resets (system_users_id, token, expires_at)
+    VALUES (:uid, :token, :expires)
+");
+$stmt->execute([
+    ':uid' => $user['system_users_id'],
+    ':token' => $tokenHash,
+    ':expires' => $expires
+]);
 
-    $resetUrl = "https://あなたのドメイン/reset_password.php?token=" . $token;
+$resetUrl = "https://あなたのドメイン/reset_password.php?token=" . $token;
 
     mail($email, "パスワード再設定", "以下のURLからパスワードを再設定してください:\n$resetUrl");
 }

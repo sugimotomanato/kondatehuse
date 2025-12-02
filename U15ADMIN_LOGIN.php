@@ -43,7 +43,7 @@ body {
        <button type="submit">ログイン</button>
     </form>
 
-    <a href="U19ADMIN_MAKE.php">管理者登録はこちら</a>
+   <p> <a href="U19ADMIN_MAKE.php">管理者登録はこちら</a></p>
        <a href="U25.php">パスワード再設定はこちら</a>
 
 </body>
