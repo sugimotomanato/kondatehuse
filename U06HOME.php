@@ -9,7 +9,7 @@ $db_name = 'LAA1685019-kondatehausu';
 
 // 【登録】カードの初期値（データがない場合のデフォルト表示：鮭定食）
 $latest_title = "【登録】鮭定食"; 
-$latest_image = "/sake.jpg"; 
+$latest_image = "teisyoku/sake.jpg"; 
 $latest_id = 7; 
 
 try {
@@ -154,7 +154,7 @@ try {
                         </div>
                     </h2>
                     <h2 class="text-xl font-bold text-gray-700">の人気献立
-                        <a href="U09RANKING.php" class="text-sm font-normal text-primary-pink ml-2 hover:underline">&gt;</a>
+                        <a href="U09.php" class="text-sm font-normal text-primary-pink ml-2 hover:underline">&gt;</a>
                     </h2>
                 </div>
 
@@ -206,7 +206,7 @@ try {
 
             <section>
                 <h2 class="text-xl font-bold mb-3 text-gray-700">お気に入り
-                    <a href="U08OKINI.php" class="text-sm font-normal text-primary-pink ml-2 hover:underline">&gt;</a>
+                    <a href="U08.php" class="text-sm font-normal text-primary-pink ml-2 hover:underline">&gt;</a>
                 </h2>
                 <div id="favorite-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="4">
@@ -259,7 +259,7 @@ try {
 
             <section>
                 <h2 class="text-xl font-bold mb-3 text-gray-700">カレンダー
-                    <a href="U07CARENDER.php" class="text-sm font-normal text-primary-pink ml-2 hover:underline">&gt;</a>
+                    <a href="U07.php" class="text-sm font-normal text-primary-pink ml-2 hover:underline">&gt;</a>
                 </h2>
                 <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="<?php echo $latest_id; ?>">
@@ -414,9 +414,9 @@ try {
                 </div>
 
                 <nav class="space-y-6 text-gray-700 text-lg font-semibold">
-                    <a href="U14LIST.php">買い物リスト</a>
-                    <a href="#" class="block hover:text-primary-pink transition duration-150" onclick="showMessageBox('グループ削除画面へ遷移します。'); closeDrawer(); return false;">
-                        グループ削除
+                    <a href="U14MEMO.php">買い物リスト</a><br>
+                    <a href="U04DELEATE.php">グループ削除</a>
+
                     </a>
                 </nav>
             </div>
@@ -626,12 +626,14 @@ try {
         }
 
         // カード遷移
-        document.querySelectorAll('.meal-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const id = e.currentTarget.getAttribute('data-meal-id');
-                showMessageBox(`料理ID: ${id} の詳細画面へ遷移します。`);
-            });
-        });
+        // カード遷移
+document.querySelectorAll('.meal-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        const id = e.currentTarget.getAttribute('data-meal-id');
+        // IDを持って詳細画面へ移動
+        window.location.href = `U24SYOUSAI.php?id=${id}`;
+    });
+});
 
         // 日付ピッカー
         datePickerTrigger.addEventListener('click', (e) => {
