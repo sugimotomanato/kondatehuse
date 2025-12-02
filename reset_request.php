@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // 1) メールアドレスのユーザーを探す
-    $stmt = $pdo->prepare("SELECT system_users_id FROM system WHERE email = :email");
+    $stmt = $pdo->prepare("SELECT `system_users_id` FROM `system` WHERE `email` = :email");
 $stmt->execute([':email' => $email]);
 $user = $stmt->fetch();
 
@@ -24,10 +24,8 @@ if ($user) {
 $tokenHash = password_hash($token, PASSWORD_DEFAULT); // 保存用ハッシュ
 $expires = date("Y-m-d H:i:s", time() + 3600);
 
-$stmt = $pdo->prepare("
-    INSERT INTO password_resets (system_users_id, token, expires_at)
-    VALUES (:uid, :token, :expires)
-");
+$stmt = $pdo->prepare("INSERT INTO `password_resets` (`system_users_id`, `token`, `expires_at`)
+    VALUES (:uid, :token, :expires)");
 $stmt->execute([
     ':uid' => $user['system_users_id'],
     ':token' => $tokenHash,
