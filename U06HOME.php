@@ -9,7 +9,7 @@ $db_name = 'LAA1685019-kondatehausu';
 
 // 【登録】カードの初期値（データがない場合のデフォルト表示：鮭定食）
 $latest_title = "【登録】鮭定食"; 
-$latest_image = "teisyoku/sake.jpg"; 
+$latest_image = "/sake.jpg"; 
 $latest_id = 7; 
 
 try {
@@ -71,7 +71,7 @@ try {
         .main-content {
             padding-bottom: 200px; 
             min-height: calc(100vh - 72px);
-            background-image: url('haikei.jpg'); 
+            background-image: url('haikei1.jpg'); 
             background-size: cover;
             background-position: center;
             background-attachment: scroll; 
@@ -160,7 +160,7 @@ try {
 
                 <div id="popular-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="1">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/hanba-gu.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('hanba-gu.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
                             <p class="text-xs text-gray-500">レシピや詳細</p>
@@ -174,7 +174,7 @@ try {
                         </div>
                     </div>
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="2">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/karaage.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('karaage.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">唐揚げ定食</h3>
                             <p class="text-xs text-gray-500">レシピや詳細</p>
@@ -188,7 +188,7 @@ try {
                         </div>
                     </div>
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="3">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/sashimi.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('sashimi.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">刺身定食</h3>
                             <p class="text-xs text-gray-500">レシピや詳細</p>
@@ -210,7 +210,7 @@ try {
                 </h2>
                 <div id="favorite-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="4">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/gyouza.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('gyouza.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">餃子定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
@@ -225,7 +225,7 @@ try {
                         </div>
                     </div>
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="5">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/saba.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('saba.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">鯖定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
@@ -240,7 +240,7 @@ try {
                         </div>
                     </div>
                     <div class="flex-shrink-0 meal-card relative" data-meal-id="6">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/nikunoyasai.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('nikunoyasai.jpg'); background-size: cover;"></div>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">肉の野菜炒め定食</h3>
                             <p class="text-xs text-gray-500">レシピや評価</p>
@@ -273,7 +273,7 @@ try {
     </div>
 </div>
                     <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('teisyoku/gyoutan.jpg'); background-size: cover;"></div>
+                        <div class="h-2/3 bg-gray-200" style="background-image: url('gyoutan.jpg'); background-size: cover;"></div>
                         <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">本日2(火)</span>
                         <div class="p-2">
                             <h3 class="font-semibold text-gray-800 text-sm truncate">【提案】牛タン定食</h3>
