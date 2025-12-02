@@ -4,9 +4,6 @@ session_start();// ハッシュを読み込む
 $error = $_SESSION['error'] ?? '';
 unset($_SESSION['error']); // 1回表示したら消す
 
-if (!empty($_SESSION['logged_in'])) {
-    // 何もしない → 後続の U20 のフォーム表示へ
-} else {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
  $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
 try{
@@ -31,7 +28,7 @@ try{
              exit();
     }
 }
-}
+
 ?>
 
 
