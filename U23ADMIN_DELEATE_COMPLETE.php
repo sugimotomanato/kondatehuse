@@ -14,7 +14,7 @@ $db_name = 'LAA1685019-kondatehausu';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // GET から ID 取得（安全処理）
-    $id = $_GET['parent_account_ID'] ?? '';
+    $id = $_POST['parent_account_ID'] ?? '';
 
     if ($id === '') {
         $_SESSION['error'] = "削除対象IDが指定されていません。";
