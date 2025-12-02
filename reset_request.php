@@ -15,27 +15,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // 1) メールアドレスのユーザーを探す
-    $stmt = $pdo->prepare("SELECT `system_users_id` FROM `system` WHERE `email` = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    $stmt = $pdo->prepare("SELECT system_users_id FROM system WHERE email = :email");
+$stmt->execute([':email' => $email]);
+$user = $stmt->fetch();
 
-    if ($user) {
-        // 2) トークン生成（安全なランダム値）
-        $token = bin2hex(random_bytes(32));
+if ($user) {
+    $token = bin2hex(random_bytes(32));
+    $expires = date("Y-m-d H:i:s", time() + 3600);
 
-        // 3) トークンをDBに保存（有効期限つき）
-        $stmt = $pdo->prepare("
-            INSERT INTO password_resets (user_id, token, expires_at)
-            VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 1 HOUR))
-        ");
-        $stmt->execute([$user['id'], $token]);
+    $stmt = $pdo->prepare("
+        INSERT INTO password_resets (system_users_id, token, expires_at)
+        VALUES (:uid, :token, :expires)
+    ");
+    $stmt->execute([
+        ':uid' => $user['system_users_id'],
+        ':token' => $token,
+        ':expires' => $expires
+    ]);
 
-        // 4) リセット用URLを生成
-        $url = "https://example.com/reset_password.php?token=" . $token;
+    $resetUrl = "https://あなたのドメイン/reset_password.php?token=" . $token;
 
-        // 5) メール送信（簡易例）
-        mail($email, "パスワード再設定", "以下のURLからパスワードを再設定してください：\n\n$url");
-    }
+    mail($email, "パスワード再設定", "以下のURLからパスワードを再設定してください:\n$resetUrl");
+}
 
     echo "リセットリンクを送信しました。";
 
