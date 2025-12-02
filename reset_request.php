@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':expires' => $expires
             ]);
 
-            $resetUrl = "https://あなたのドメイン/reset_password.php?token=" . urlencode($token);
+            $resetUrl = "https://aso2301200.fem.jp/reset_password.php?token=" . urlencode($token);
 
             // 本番環境ではPHPMailerなどで確実に送信する
             mail($email, "パスワード再設定", "以下のURLからパスワードを再設定してください:\n$resetUrl");
