@@ -11,7 +11,7 @@ $db_pass = '6group';                     // データベースパスワード
 $db_name = 'LAA1685019-kondatehausu';         // データベース名
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
-$id = $_GET['parent_account_ID'] ?? '';
+$id = $_GET['id'] ?? '';
  // 安全に取得
  $ID=$id;
 
@@ -59,9 +59,9 @@ try {
 <body>
     <h1>削除しますか？</h1>
 
-    <p>ID： <?= htmlspecialchars($delete_data['parent_account_ID']) ?></p>
-    <p>家族コード： <?= htmlspecialchars($delete_data['family_code']) ?></p>
-    <p>ユーザー名： <?= htmlspecialchars($delete_data['user_name']) ?></p>
+<p>ID： <?= htmlspecialchars($delete_data['parent_account_ID']) ?></p>
+<p>家族コード： <?= htmlspecialchars($delete_data['family_code']) ?></p>
+<p>ユーザー名： <?= htmlspecialchars($delete_data['user_name']) ?></p>
 
 
 
