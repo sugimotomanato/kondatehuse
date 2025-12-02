@@ -51,7 +51,7 @@
             
             <!-- ★★★ ヘッダーエリア (変更点) ★★★ -->
             <div class="flex flex-wrap justify-between items-center mb-4 border-b pb-3 gap-y-3">
-                <h1 class="text-2xl font-bold text-gray-800">AIメモ帳</h1>
+                <h1 class="text-2xl font-bold text-gray-800">メモ帳</h1>
                 
                 <!-- 右側のコントロールをグループ化 -->
                 <div class="flex items-center space-x-4">
@@ -87,15 +87,7 @@
 
             <!-- Gemini API 機能ボタンエリア (変更なし) -->
             <div id="gemini-controls" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 p-3 bg-gray-50 rounded-xl border">
-                <button id="btn-continue" class="gemini-button">
-                    <span class="mr-1.5">✨</span> 続きを書く
-                </button>
-                <button id="btn-summarize" class="gemini-button">
-                    <span class="mr-1.5">✨</span> 要約する
-                </button>
-                <button id="btn-brainstorm" class="gemini-button">
-                    <span class="mr-1.5">✨</span> アイデア出し
-                </button>
+                
             </div>
 
             <!-- メモ帳本体 (変更なし) -->

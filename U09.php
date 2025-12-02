@@ -138,7 +138,7 @@
         <header class="p-4 flex flex-row justify-between items-center sticky top-0 z-10 border-b border-gray-100 header-bg">
             
             <!-- ホームタイトル (左寄せ) -->
-            <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">お気に入り</h1>
+            <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">ランキング</h1>
 
             <!-- ハンバーガーメニュー (右端) - ドロワー開閉用 -->
             <button id="menu-button" class="p-2 text-gray-600 hover:text-gray-800 rounded-full transition duration-150 ui-element-bg">
