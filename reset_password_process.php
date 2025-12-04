@@ -50,7 +50,7 @@ try {
 
     // パスワード更新
     $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare("UPDATE `system` SET `password` = :pw WHERE `system_users_id` = :uid");
+    $stmt = $pdo->prepare("UPDATE `system` SET `system_users_password` = :pw WHERE `system_users_id` = :uid");
     $stmt->execute([
         ':pw' => $passwordHash,
         ':uid' => $userId
