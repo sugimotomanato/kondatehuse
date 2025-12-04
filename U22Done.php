@@ -107,8 +107,10 @@ KondateHause 管理システム";
         exit();
     }
 }else{
-        header('Location: ./U19ADMIN_MAKE.php');
-    exit();
+ error_log("無効アクセス: " . $e->getMessage());
+        $_SESSION['error'] = "無効なアクセスです";
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
 }
 ?>
 

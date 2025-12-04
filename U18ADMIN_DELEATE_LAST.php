@@ -33,6 +33,11 @@ try {
         header('Location: ./U17ADMIN_DELEATE.php');
         exit();
     }
+}else{
+     error_log("無効アクセス: " . $e->getMessage());
+        $_SESSION['error'] = "無効なアクセスです";
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
 }
 
 ?>
@@ -65,7 +70,7 @@ try {
 
 
 
-    <form action="U23ADMIN_DELEATE_COMPLETE.php" method="post" style="display:inline;">
+    <form action="U23ADMIN_DELEATE_CONFIRM.php" method="post" style="display:inline;">
         <input type="hidden" name="parent_account_ID" value="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?>">
         <button type="submit" name="action" value="delete">はい</button>
     </form>
