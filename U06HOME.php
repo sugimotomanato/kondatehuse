@@ -1,11 +1,23 @@
 <?php
 // U06HOME.php
+session_start(); // セッションを開始して、ログイン画面からの名前を受け取る
+
+// ログインしていない場合（セッションがない場合）の処理が必要ならここに書きますが、
+// 今回はとりあえず名前がない場合は「ゲスト」と表示するようにしています。
+$user_name_display = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name'], ENT_QUOTES, 'UTF-8') : 'ゲスト';
 
 // 1. データベース接続設定
 $db_host = 'mysql320.phy.lolipop.lan';
-$db_user = 'LAA1685019';
+$db_user = 'LAA1685019-kondatehausu'; // ユーザー名を修正（前回の設定に合わせました）
 $db_pass = '6group';
-$db_name = 'LAA1685019-kondatehausu';
+$db_name = 'LAA1685019'; // データベース名を修正
+
+// ローカル環境(XAMPP)とロリポップ環境の自動切り替え
+if ($_SERVER['SERVER_NAME'] === 'localhost') {
+    $db_host = 'localhost';
+    $db_user = 'root';
+    $db_pass = '';
+}
 
 // 【登録】カードの初期値（データがない場合のデフォルト表示：鮭定食）
 $latest_title = "【登録】鮭定食"; 
@@ -34,10 +46,9 @@ try {
 
 } catch (PDOException $e) {
     // エラー時はデフォルト(鮭定食)のまま
+    // echo $e->getMessage(); // デバッグ用
 }
 ?>
-<!DOCTYPE html>
-<html lang="ja">
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -312,7 +323,7 @@ try {
                                 <span id="my-reaction-emoji" role="img" aria-label="自分">😊</span>
                             </button>
                         </a>
-                        <p id="my-reaction-name" class="text-xs font-medium text-primary-pink mt-1">自分</p>
+                        <p id="my-reaction-name" class="text-xs font-medium text-primary-pink mt-1"><?php echo $user_name_display; ?></p>
                     </div>
 
                     <div id="reaction-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-3 pb-2 flex-grow">
@@ -409,7 +420,7 @@ try {
                     </button>
 
                     <p id="user-name" class="text-lg font-bold text-gray-700 p-1 border-b border-gray-300 cursor-pointer hover:bg-gray-100 transition duration-150" onclick="editName()">
-                        [自分の名前]
+                        <?php echo $user_name_display; ?>
                     </p>
                 </div>
 
@@ -432,7 +443,8 @@ try {
 
     <script>
         // --- 基本設定 ---
-        let userName = "[自分の名前]";
+        // PHPから変数を受け取る
+        let userName = "<?php echo $user_name_display; ?>";
         let currentEmoji = "😊"; 
         let hasNotification = true; 
         let userIconUrl = ""; 
@@ -461,8 +473,11 @@ try {
 
         // --- ★初期化時にデータをロードする★ ---
         document.addEventListener('DOMContentLoaded', () => {
+            // PHPで既に埋め込んでいるので、ここでは変数を元に更新する必要は本来ないですが
+            // JavaScript変数との整合性を保つために一応セットしておきます
             userNameElement.textContent = userName;
             myReactionNameElement.textContent = userName;
+            
             updateBellNotification();
             updateUserIcon();
             updatePopularHeading(currentSelection); 
