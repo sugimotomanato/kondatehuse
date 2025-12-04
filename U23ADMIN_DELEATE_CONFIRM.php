@@ -34,9 +34,13 @@ $id=trim($_POST['parent_account_ID'] ?? '');
 </head>
 <body>
     <h1>ほんとうに削除しますか？</h1>
-    <form action="U23ADMIN_DELEATE_COMPLETE.php" method="post">
+    <form action="U23ADMIN_DELEATE_COMPLETE.php" method="post" style="display:inline;">
          <input type="hidden" name="parent_account_ID" value="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?>">
         <button type="submit" name="action" value="delete">はい</button>
+    </form>
+
+    <form action="U17ADMIN_DELEATE.php" method="get" style="display:inline;">
+        <button type="submit">いいえ</button>
     </form>
 </body>
 </html>
