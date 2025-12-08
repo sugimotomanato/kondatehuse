@@ -3,7 +3,7 @@ ob_start();
 session_start();// ハッシュを読み込む
 $error = $_SESSION['error'] ?? '';
 unset($_SESSION['error']); // 1回表示したら消す
-
+if($error === '' ){
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
  $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
 try{
@@ -33,6 +33,10 @@ try{
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
 }
+
+}
+
+
 
 ?>
 
