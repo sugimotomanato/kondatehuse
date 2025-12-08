@@ -1,709 +1,255 @@
+<?php
+// U05FAV.php: お気に入り一覧画面
+
+// ==========================================================
+// 1. データベース接続設定
+// ==========================================================
+$db_host = 'mysql320.phy.lolipop.lan'; 
+$db_user = 'LAA1685019-kondatehausu'; 
+$db_pass = '6group'; 
+$db_name = 'LAA1685019'; 
+
+$favorite_recipes = [];
+$user_name = "ゲスト"; 
+$error_message = null;
+
+try {
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // 1-1. お気に入りレシピの取得
+    // (注意) 正確にはユーザーIDとお気に入りテーブルを結合する必要がありますが、
+    // ここではデモとしてhert(いいね)が0より大きいレシピを取得します。
+    $sql_fav = "SELECT recipe_id, title, hert, image_path FROM recipe WHERE hert > 0 ORDER BY hert DESC";
+    $stmt_fav = $pdo->query($sql_fav);
+    $favorite_recipes = $stmt_fav->fetchAll(PDO::FETCH_ASSOC);
+
+    // 1-2. ユーザー情報の取得 (サイドメニュー用: ID=1固定、parent_accountテーブル参照)
+    $stmt_user = $pdo->prepare("SELECT user_name, icon FROM parent_account WHERE parent_account_ID = ?");
+    $stmt_user->execute([1]);
+    $user_data = $stmt_user->fetch(PDO::FETCH_ASSOC);
+    if ($user_data && !empty($user_data['user_name'])) {
+        $user_name = htmlspecialchars($user_data['user_name']);
+    }
+
+} catch (PDOException $e) {
+    // エラーハンドリング
+    $error_message = "データベース接続またはデータ取得中にエラーが発生しました。DB情報をご確認ください。";
+}
+
+// --------------------------------------------------------------------------
+// 2. データがない場合 または エラー時のダミーデータ
+// --------------------------------------------------------------------------
+if (empty($favorite_recipes)) {
+    // 画像の雰囲気に合わせてダミーを複数用意
+    for ($i = 1; $i <= 8; $i++) {
+        $favorite_recipes[] = [
+            'recipe_id' => $i,
+            'title' => 'ハンバーグ定食',
+            'hert' => 3, // ダミーのランク用
+            'image_path' => '' // 空文字ならダミー画像を表示
+        ];
+    }
+    if ($error_message) {
+        $error_message .= " ダミーデータで表示しています。";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>献立ホーム画面</title>
-    <!-- Tailwind CSS CDNを読み込み -->
+    <title>お気に入り</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // Interフォントとカスタム設定
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-pink': '#000000', 
-                        'secondary-gray': '#D1D5DB', 
-                        'accent-yellow': '#FFD700', 
-                        'light-bg': '#F9FAFB', 
-                        'card-border': '#E5E7EB', 
-                        'notify-red': '#EF4444', 
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* スクロールバーを非表示にする（iOS/Android風） */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans JP', sans-serif; }
 
-        /* 画面全体をモバイルの縦幅に合わせて最大化 */
-        body, html {
-            height: 100%;
-        }
-
-        /* 背景画像の設定 */
-        .main-content {
-            padding-bottom: 190px; /* フッターの高さに合わせる */
-            min-height: calc(100vh - 72px);
-            
-            /* 【修正点】ローカル実行用に相対パスに戻しました。*/
-            /* HTMLファイルと同じフォルダに haikei.jpg を置いてください。*/
+        /* 背景画像設定 (2枚目の画像のようなボケた食卓背景) */
+        .main-bg {
+            /* ユーザーの画像にあった背景ファイル名を使用 */
             background-image: url('haikei2.jpg'); 
-            
             background-size: cover;
             background-position: center;
-            background-attachment: scroll; 
-            background-color: transparent; 
+            background-attachment: fixed;
+            min-height: 100vh;
         }
         
-        /* UI要素の背景を半透明の白に変更し、背景を透けさせる */
-        .ui-element-bg {
-            
-            
+        /* 全体のオーバーレイ (半透明の白) */
+        .content-overlay {
+            background-color: rgba(255, 255, 255, 0.6); 
+            min-height: 100vh;
+            backdrop-filter: blur(3px); 
         }
 
-        /* カードの背景（半透明の白に統一） */
-        .meal-card-bg {
-            background-color: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(5px);
-        }
-
-        /* ヘッダーの背景を調整 */
-        .header-bg {
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-        }
-
-        /* カードの見た目を統一 */
-        .meal-card {
-            width: 240px;
-            height: 160px; 
-            border-radius: 1rem; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); 
-            overflow: hidden;
-            border: 1px solid #E5E7EB; 
-            background-color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-        }
-
-        /* サイドメニューのスタイル */
+        /* サイドメニュー (ドロワー) スタイル */
         .drawer {
-            transition: transform 0.3s ease-out;
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 80%;
+            max-width: 300px;
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
             transform: translateX(100%);
-            width: 80%; 
+            transition: transform 0.3s ease-in-out;
+            z-index: 50;
         }
-        .drawer.is-open {
-            transform: translateX(0);
-        }
-
-        /* 通知ベルの赤いバッジ */
-        .notification-bell {
-            position: relative;
-        }
-        .notification-bell.has-notification::after {
-            content: '';
-            position: absolute;
-            top: 4px; 
-            right: 4px;
-            width: 8px;
-            height: 8px;
-            background-color: #EF4444; 
-            border-radius: 50%;
-            border: 1px solid white; 
-        }
+        .drawer.open { transform: translateX(0); }
         
-        /* アイコン画像のコンテナスタイル */
-        .user-icon-container {
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        /* 日付選択ドロップダウンのスタイル */
-        .date-picker-menu {
-            position: absolute;
-            top: 100%;
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
             left: 0;
-            z-index: 10;
-            min-width: 120px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+            z-index: 40;
+        }
+        .drawer-overlay.open { opacity: 1; visibility: visible; }
+
+        /* 期間選択メニュー (画像 a118fb.png の要素を再現) */
+        .period-menu {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            position: fixed;
+            left: 0;
+            top: 15%; 
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 5px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            z-index: 20;
+        }
+        .period-menu a {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            padding: 2px;
+            font-weight: 500;
+        }
+        .period-menu a.active {
+            font-weight: bold;
+            color: #ef4444; /* red-500 */
         }
     </style>
 </head>
-<body class="bg-light-bg font-sans">
+<body class="main-bg">
+    <div class="content-overlay">
 
-    <!-- メインコンテンツラッパー -->
-    <div class="main-content max-w-md mx-auto shadow-lg overflow-x-hidden relative">
+        <header class="flex justify-between items-start px-4 pt-6 pb-2 sticky top-0 z-10 bg-white/50 backdrop-blur-sm">
+            <div>
+                <h1 class="text-3xl font-bold text-black drop-shadow-sm mb-1">お気に入り</h1>
+                
+                <div class="flex items-center bg-white/80 rounded px-1 py-0.5 w-max shadow-sm border border-gray-200">
+                    <span class="text-sm font-bold text-gray-700 mr-1">今日</span>
+                    <i class="fa-solid fa-caret-down text-gray-400 text-xs mr-1"></i>
+                    <span class="text-sm font-bold text-black">の人気献立</span>
+                </div>
+            </div>
 
-        <!-- ヘッダーエリア: ホームを左に寄せます -->
-        <header class="p-4 flex flex-row justify-between items-center sticky top-0 z-10 border-b border-gray-100 header-bg">
-            
-            <!-- ホームタイトル (左寄せ) -->
-            <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">お気に入り</h1>
-
-            <!-- ハンバーガーメニュー (右端) - ドロワー開閉用 -->
-            <button id="menu-button" class="p-2 text-gray-600 hover:text-gray-800 rounded-full transition duration-150 ui-element-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+            <button id="menu-btn" class="text-black text-3xl focus:outline-none mt-1">
+                <i class="fa-solid fa-bars"></i>
             </button>
         </header>
         
-        <!-- メインスクロールエリア -->
-        <div class="p-4 space-y-6 ui-element-bg">
+        <?php if ($error_message): ?>
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mx-4 my-4 rounded" role="alert">
+                <p class="font-bold">エラー</p>
+                <p><?php echo htmlspecialchars($error_message); ?></p>
+            </div>
+        <?php endif; ?>
 
-<input type="month" id="month" name="month" value="2025-10" min="2000-01" max="2030-12">
-</form>
-<script>
- // 送信時の値は "2025-10" になる（必要ならスラッシュに変換）
- document.querySelector('form').addEventListener('submit', e => {
-   e.preventDefault();
-   const v = document.getElementById('month').value; // "2025-10"
-   console.log(v);
-   console.log(v.replace('-', '/')); // "2025/10"
- });
-</script>
-                    
-                    
-                </div>
-
-
-                
-                <section>
-               
-                <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
-                    
-                    <!-- カード 1 (日付表示) -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="7">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+1'); background-size: cover;"></div>
-                        <!-- 日付バッジ -->
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">1(月)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-
-                    <!-- カード 2 (日付表示と赤いハイライト) -->
-                    <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+2'); background-size: cover;"></div>
-                        <!-- 日付バッジ (赤色) -->
-                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">2(火)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-
-                    <!-- カード 3 -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="9">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+3'); background-size: cover;"></div>
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">3(水)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 2. お気に入り (水平横スクロール) -->
-            <section>
-               
-                <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
-                    
-                    <!-- カード 1 (日付表示) -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="7">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+1'); background-size: cover;"></div>
-                        <!-- 日付バッジ -->
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">1(月)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-
-                    <!-- カード 2 (日付表示と赤いハイライト) -->
-                    <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+2'); background-size: cover;"></div>
-                        <!-- 日付バッジ (赤色) -->
-                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">2(火)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-
-                    <!-- カード 3 -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="9">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+3'); background-size: cover;"></div>
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">3(水)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 3. カレンダー (水平横スクロール) -->
-            <section>
-               
-                <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
-                    
-                    <!-- カード 1 (日付表示) -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="7">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+1'); background-size: cover;"></div>
-                        <!-- 日付バッジ -->
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">1(月)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-
-                    <!-- カード 2 (日付表示と赤いハイライト) -->
-                    <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+2'); background-size: cover;"></div>
-                        <!-- 日付バッジ (赤色) -->
-                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">2(火)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-
-                    <!-- カード 3 -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="9">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+3'); background-size: cover;"></div>
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">3(水)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-               
-                <div id="calendar-scroll" class="flex overflow-x-scroll hide-scrollbar space-x-4 pb-2 -mx-4 px-4">
-                    
-                    <!-- カード 1 (日付表示) -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="7">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+1'); background-size: cover;"></div>
-                        <!-- 日付バッジ -->
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">1(月)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-
-                    <!-- カード 2 (日付表示と赤いハイライト) -->
-                    <div class="flex-shrink-0 meal-card relative border-2 border-yellow-500" data-meal-id="8">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+2'); background-size: cover;"></div>
-                        <!-- 日付バッジ (赤色) -->
-                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">2(火)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-
-                    <!-- カード 3 -->
-                    <div class="flex-shrink-0 meal-card relative" data-meal-id="9">
-                        <div class="h-2/3 bg-gray-200" style="background-image: url('https://placehold.co/240x106/f0f0f0/333?text=Date+3'); background-size: cover;"></div>
-                        <span class="absolute top-2 left-2 bg-white/80 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full shadow-md">3(水)</span>
-                        <div class="p-2">
-                            <h3 class="font-semibold text-gray-800 text-sm truncate">ハンバーグ定食</h3>
-                            <p class="text-xs text-gray-500">レシピや評価</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-
-           
+        <div class="period-menu">
+            <a href="#" class="active">ランダム</a>
+            <a href="#">翌年</a>
+            <a href="#">先月</a>
+            <a href="#">先週</a>
         </div>
 
-        
+        <main class="p-4 pl-16 pb-20">
+            <div class="grid grid-cols-2 gap-3">
+                <?php foreach ($favorite_recipes as $index => $recipe): ?>
+                    <?php 
+                        $img_src = !empty($recipe['image_path']) ? htmlspecialchars($recipe['image_path']) : 'https://placehold.co/300x200/e2e8f0/94a3b8?text=No+Image';
+                        // DBからhert数を取得し、今回はダミーで順位を3位固定とします（画像再現のため）
+                        $rank = $recipe['hert'] ?? 3; 
+                    ?>
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 relative">
+                        <a href="U12DETAIL.php?recipe_id=<?php echo $recipe['recipe_id']; ?>" class="block h-28 w-full bg-gray-200">
+                            <img src="<?php echo $img_src; ?>" alt="レシピ画像" class="w-full h-full object-cover">
+                        </a>
+
+                        <div class="absolute top-1 right-1 bg-white/90 backdrop-blur rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm text-gray-700">
+                            3位 </div>
+
+                        <button class="absolute top-20 right-2 w-7 h-7 bg-white rounded-full shadow-sm flex items-center justify-center z-10">
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                        </button>
+
+                        <div class="p-2 text-center">
+                            <h3 class="font-bold text-sm text-gray-800 truncate mb-1">
+                                <?php echo htmlspecialchars($recipe['title']); ?>
+                            </h3>
+                            <div class="flex justify-between items-center px-1">
+                                <span class="text-[10px] text-gray-400">レシピや詳細</span>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </main>
+
+    </div>
+
+    <div id="drawer-overlay" class="drawer-overlay"></div>
+    <div id="drawer" class="drawer flex flex-col">
+        <button id="close-drawer" class="absolute top-4 right-4 text-gray-500 text-2xl focus:outline-none">
+            <i class="fa-solid fa-times"></i>
+        </button>
+
+        <div class="p-6 mt-8">
+            <div class="mb-4 text-yellow-400 text-2xl"><i class="fa-solid fa-bell"></i></div>
+            <div class="text-xs text-gray-500 mb-8">家族コード <span class="font-bold text-black text-sm">A12345</span></div>
+            
+            <div class="flex flex-col items-center mb-10">
+                <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-4xl shadow-inner mb-3">
+                    <span>😷</span>
                 </div>
+                <h2 class="font-bold text-lg text-gray-800 border-b border-gray-300 pb-1 w-full text-center">
+                    <?php echo $user_name; ?>
+                </h2>
+            </div>
 
-                <!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>検索画面へ遷移</title>
-    <!-- Tailwind CSSの読み込み -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* フォントの指定 */
-        body { font-family: "Inter", sans-serif; }
-    </style>
-</head>
-<body class="bg-gray-100 flex items-start justify-center min-h-screen pt-40 md:pt-64">
-
-    <div class="w-full max-w-xl px-4">
-        <!-- 
-            検索バーのコンテナ: 
-            白背景、カプセル型の角丸 (rounded-full)、柔らかな影 (shadow-xl)、Flexでアイコンと入力を配置 
-        -->
-        
-        <div id="alertMessage" class="mt-4 text-center text-red-600 opacity-0 transition-opacity duration-300">
-            キーワードを入力してください。
+            <nav class="flex-col space-y-4 text-gray-700 font-bold">
+                <a href="U14LIST.php" class="block hover:text-red-500 transition">買い物リスト</a>
+                <div class="h-px bg-gray-200 my-2"></div>
+                <a href="U06HOME.php" class="block hover:text-red-500 transition">ホームへ戻る</a>
+            </nav>
         </div>
     </div>
 
     <script>
-        /**
-         * 検索ボタンのクリック、またはEnterキー押下時に実行される関数。
-         * 検索キーワードを取得し、U13KENSAKU.phpへ遷移します。
-         */
-        function handleSearchClick() {
-            const inputElement = document.getElementById('searchInput');
-            const searchTerm = inputElement.value.trim();
-            const alertElement = document.getElementById('alertMessage');
-            
-            // 1. 入力値が空でないかチェック
-            if (searchTerm === "") {
-                // エラーメッセージを表示
-                alertElement.classList.remove('opacity-0');
-                
-                // 3秒後にメッセージを非表示にする
-                setTimeout(() => {
-                    alertElement.classList.add('opacity-0');
-                }, 3000);
-                
-                return; // 処理を中断
-            }
-
-            // 2. U13KENSAKU.phpへ画面遷移する
-            // 💡 補足: 検索キーワードをURLパラメータとして渡す場合は以下の形式を使います。
-            // const destinationUrl = `U13KENSAKU.php?q=${encodeURIComponent(searchTerm)}`;
-            
-            const destinationUrl = "U13KENSAKU.php";
-            
-            console.log(`U13KENSAKU.phpへ遷移を開始します... (検索語: ${searchTerm})`);
-            
-            // 3. 画面遷移を実行
-            window.location.href = destinationUrl;
-        }
-
-    </script>
-</body>
-</html>
-
-            </div>
-        </footer>
-
-    </div>
-
-    <!-- サイドメニュー (ドロワー) -->
-    <div id="drawer-backdrop" class="fixed inset-0 bg-black bg-opacity-40 z-30 hidden" onclick="closeDrawer()"></div>
-    <div id="drawer" class="fixed top-0 right-0 h-full bg-white shadow-2xl z-40 drawer flex flex-col">
-        <div class="flex-shrink-0">
-            <!-- 申請通知エリア (初期は非表示) -->
-            <div id="application-notification" class="hidden bg-gray-100 border-b border-gray-200 text-sm">
-                <div class="flex justify-between items-center py-2 px-4">
-                    <span class="text-gray-700">----から申請が届きました</span>
-                    <div class="flex space-x-2">
-                        <button class="text-sm text-green-600 font-bold" onclick="handleApplication('承認')">承認</button>
-                        <button class="text-sm text-red-600 font-bold" onclick="handleApplication('拒否')">拒否</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-6">
-                <!-- 通知ベルとメニュー閉じるボタン -->
-                <div class="flex justify-between items-start mb-6">
-                    <!-- 通知ベル -->
-                    <button id="notification-bell-button" class="p-1 rounded-full notification-bell" onclick="toggleApplicationNotification()">
-                        <span id="bell-icon" class="text-3xl">🔔</span>
-                    </button>
-                    <!-- メニュー閉じるボタン -->
-                    <button class="text-gray-600 hover:text-gray-800" onclick="closeDrawer()">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                </div>
-                
-                <!-- 家族コード -->
-                <p class="text-sm text-gray-600 mb-8">家族コード <span class="font-bold text-gray-800">A12345</span></p>
-
-                <!-- ユーザーアイコンと名前エリア -->
-                <div class="flex flex-col items-center mb-10">
-                    <!-- アイコンと絵文字のコンテナ -->
-                    <button id="user-icon-button" class="relative w-28 h-28 rounded-full shadow-md flex items-center justify-center mb-4 transition duration-150 user-icon-container" onclick="changeIconImage()">
-                        <!-- アイコンの背景を div に分離し、画像/灰色を設定 -->
-                        <div id="user-icon-background" class="w-full h-full rounded-full bg-gray-300 transition-opacity duration-300"></div>
-                        <!-- 絵文字 (中央に重ねて表示、アイコンより小さい) -->
-                        <div id="user-emoji" class="absolute text-5xl transition-opacity duration-300"></div>
-                    </button>
-
-                    <!-- 名前 (クリックで編集可能) -->
-                    <p id="user-name" class="text-lg font-bold text-gray-700 p-1 border-b border-gray-300 cursor-pointer hover:bg-gray-100 transition duration-150" onclick="editName()">
-                        [自分の名前]
-                    </p>
-                </div>
-
-                <!-- メニューリスト -->
-                <nav class="space-y-6 text-gray-700 text-lg font-semibold">
-                    <a href="U14LIST.php">買い物リスト
-                    </a>
-                    <a href="#" class="block hover:text-primary-pink transition duration-150" onclick="showMessageBox('グループ削除画面へ遷移します。'); closeDrawer(); return false;">
-                        グループ削除
-                    </a>
-                    <nav class="space-y-6 text-gray-700 text-lg font-semibold">
-                    <a href="U07HOME.php">ホーム
-                    </a>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <!-- カスタムメッセージボックス (alertの代替) -->
-    <div id="message-box" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 transition-opacity duration-300" onclick="closeMessageBox()">
-        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-xs w-full text-center transform transition-transform duration-300" onclick="event.stopPropagation()">
-            <p id="message-text" class="text-gray-800 font-semibold mb-4"></p>
-            <button class="bg-primary-pink text-white px-4 py-2 rounded-lg font-bold hover:bg-primary-pink/80 transition duration-150" onclick="closeMessageBox()">OK</button>
-        </div>
-    </div>
-
-    <script>
-        let userName = "[自分の名前]";
-        let currentEmoji = "😊"; 
-        let hasNotification = true; 
-        let userIconUrl = ""; 
-        let currentSelection = "今日"; 
-
-        // ダミーのアイコン画像選択肢
-        const ICON_OPTIONS = {
-            "デフォルト (灰色)": "",
-            "アイコンA": "https://placehold.co/100x100/1e40af/ffffff?text=IconA",
-            "アイコンB": "https://placehold.co/100x100/dc2626/ffffff?text=IconB",
-            "アイコンC": "https://placehold.co/100x100/059669/ffffff?text=IconC"
-        };
-        const ICON_NAMES = Object.keys(ICON_OPTIONS);
-
-        // DOM要素
+        // ドロワー制御
+        const menuBtn = document.getElementById('menu-btn');
+        const closeBtn = document.getElementById('close-drawer');
         const drawer = document.getElementById('drawer');
-        const drawerBackdrop = document.getElementById('drawer-backdrop');
-        const menuButton = document.getElementById('menu-button');
-        const userNameElement = document.getElementById('user-name');
-        const myReactionNameElement = document.getElementById('my-reaction-name');
-        const userEmojiElement = document.getElementById('user-emoji');
-        const userIconBackground = document.getElementById('user-icon-background'); 
-        const bellButton = document.getElementById('notification-bell-button');
-        const applicationNotification = document.getElementById('application-notification');
-        const datePickerTrigger = document.getElementById('date-picker-trigger'); 
-        const datePickerMenu = document.getElementById('date-picker-menu');      
-        
-        // ユーザー名、絵文字、通知、日付選択の初期設定
-        userNameElement.textContent = userName;
-        myReactionNameElement.textContent = userName;
-        updateBellNotification();
-        updateUserIcon();
-        updatePopularHeading(currentSelection); 
+        const overlay = document.getElementById('drawer-overlay');
 
-        // メッセージ表示関数 (alertの代替)
-        function showMessageBox(message) {
-            document.getElementById('message-text').textContent = message;
-            document.getElementById('message-box').classList.remove('hidden');
-            document.getElementById('message-box').classList.add('flex');
+        function toggleDrawer() {
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('open');
         }
 
-        function closeMessageBox() {
-            document.getElementById('message-box').classList.remove('flex');
-            document.getElementById('message-box').classList.add('hidden');
-        }
-
-        // --- サイドメニュー関連の処理 ---
-        menuButton.addEventListener('click', openDrawer);
-        function openDrawer() {
-            drawer.classList.add('is-open');
-            drawerBackdrop.classList.remove('hidden');
-        }
-        function closeDrawer() {
-            drawer.classList.remove('is-open');
-            drawerBackdrop.classList.add('hidden');
-            applicationNotification.classList.add('hidden');
-        }
-
-        // --- ユーザー設定関連の処理 ---
-        function editName() {
-            const newName = prompt("新しい名前を入力してください:", userName);
-            if (newName !== null && newName.trim() !== "") {
-                userName = newName.trim();
-                userNameElement.textContent = userName;
-                myReactionNameElement.textContent = userName; // 名前同期
-            }
-        }
-        
-        function changeIconImage() {
-            const promptMessage = `新しいアイコン画像を選択してください:\n${ICON_NAMES.join(', ')}`;
-            const selection = prompt(promptMessage, ICON_NAMES[0]);
-
-            if (selection !== null && ICON_OPTIONS.hasOwnProperty(selection)) {
-                userIconUrl = ICON_OPTIONS[selection];
-                updateUserIcon();
-                showMessageBox(`アイコン画像を「${selection}」に変更しました。`);
-            } else if (selection !== null) {
-                showMessageBox("無効な選択です。");
-            }
-        }
-        function updateUserIcon() {
-            if (userIconUrl) {
-                userIconBackground.style.backgroundImage = `url('${userIconUrl}')`;
-                userIconBackground.style.backgroundColor = 'transparent';
-            } else {
-                userIconBackground.style.backgroundImage = 'none';
-                userIconBackground.style.backgroundColor = '#D1D5DB'; 
-            }
-            if (currentEmoji) {
-                userEmojiElement.textContent = currentEmoji;
-                userEmojiElement.classList.remove('opacity-0');
-            } else {
-                userEmojiElement.textContent = "";
-                userEmojiElement.classList.add('opacity-0');
-            }
-        }
-
-        // --- 通知関連の処理 ---
-        function updateBellNotification() {
-            if (hasNotification) {
-                bellButton.classList.add('has-notification');
-                bellButton.classList.add('text-yellow-500'); 
-            } else {
-                bellButton.classList.remove('has-notification');
-                bellButton.classList.remove('text-yellow-500');
-            }
-        }
-        function toggleApplicationNotification() {
-            if (applicationNotification.classList.contains('hidden')) {
-                applicationNotification.classList.remove('hidden');
-            } else {
-                applicationNotification.classList.add('hidden');
-            }
-        }
-        function handleApplication(action) {
-            showMessageBox(`グループへの参加を「${action}」しました。`);
-            applicationNotification.classList.add('hidden');
-            hasNotification = false; 
-            updateBellNotification();
-        }
-
-
-        // --- ホーム画面の機能修正 ---
-        
-        // 1. 献立カード（.meal-card）をクリックしたら料理詳細画面に遷移
-        document.querySelectorAll('.meal-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const mealId = e.currentTarget.getAttribute('data-meal-id');
-                showMessageBox(`料理ID: ${mealId} の詳細画面へ遷移します。`);
-            });
-        });
-
-        // 2. 見出しの「へ移動」部分をクリックしたら詳細画面に遷移
-        document.getElementById('popular-detail-link').addEventListener('click', () => {
-            showMessageBox(`${currentSelection}の人気献立の詳細画面へ遷移します。`);
-        });
-        document.getElementById('favorite-detail-link').addEventListener('click', () => {
-            showMessageBox('お気に入り献立の詳細画面へ遷移します。');
-        });
-        document.getElementById('calendar-detail-link').addEventListener('click', () => {
-            showMessageBox('カレンダーの詳細画面へ遷移します。');
-        });
-
-
-        // 3. 日付ピッカー機能
-        function toggleDatePickerMenu() {
-            datePickerMenu.classList.toggle('hidden');
-        }
-
-        function updatePopularHeading(selection) {
-            currentSelection = selection;
-            // '今日' の部分を置き換え
-            datePickerTrigger.childNodes[0].nodeValue = selection; 
-            showMessageBox(`おかえりなさい！`);
-        }
-
-        // トリガーボタンにイベントリスナーを追加
-        datePickerTrigger.addEventListener('click', toggleDatePickerMenu);
-
-        // メニューアイテムにイベントリスナーを追加
-        document.querySelectorAll('.date-option').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const selection = e.target.getAttribute('data-value');
-                updatePopularHeading(selection);
-                closeDatePickerMenu();
-            });
-        });
-        
-        // メニュー外をクリックしたら閉じる
-        document.addEventListener('click', (e) => {
-            if (!datePickerTrigger.contains(e.target) && !datePickerMenu.contains(e.target)) {
-                closeDatePickerMenu();
-            }
-        });
-
-        function closeDatePickerMenu() {
-            datePickerMenu.classList.add('hidden');
-        }
-
-
-        // 既存の機能 (トグル、登録、検索、リアクション)
-        document.querySelectorAll('.like-button').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation(); // カード遷移をブロック
-                const isLiked = e.currentTarget.classList.toggle('text-primary-pink');
-                e.currentTarget.classList.toggle('text-secondary-gray', !isLiked);
-                const svg = e.currentTarget.querySelector('svg');
-                svg.classList.toggle('fill-current', isLiked);
-                svg.classList.toggle('fill-none', !isLiked);
-                svg.classList.toggle('stroke-current', !isLiked);
-                if (isLiked) { showMessageBox('いいねしました！'); } else { showMessageBox('いいねを解除しました。'); }
-            });
-        });
-
-        document.querySelectorAll('.star-button').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation(); // カード遷移をブロック
-                const isStarred = e.currentTarget.classList.toggle('text-accent-yellow');
-                e.currentTarget.classList.toggle('text-secondary-gray', !isStarred);
-                e.currentTarget.querySelector('svg').classList.toggle('fill-current', isStarred);
-                e.currentTarget.querySelector('svg').classList.toggle('fill-none', !isStarred);
-                e.currentTarget.querySelector('svg').classList.toggle('stroke-current', !isStarred);
-                if (isStarred) { showMessageBox('お気に入りに追加しました！'); } else { showMessageBox('お気に入りを解除しました。'); }
-            });
-        });
-
-        // 検索バーがクリックされたときの処理
-        function handleSearchClick() {
-             showMessageBox('検索画面へ遷移します。');
-        }
-
-        document.querySelectorAll('.reaction-item').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation();
-                document.querySelectorAll('.reaction-item').forEach(item => {
-                    item.classList.remove('bg-primary-pink/10', 'border-primary-pink');
-                    item.classList.add('bg-gray-100', 'border-transparent');
-                    item.nextElementSibling.classList.remove('text-primary-pink');
-                    item.nextElementSibling.classList.add('text-gray-500');
-                });
-
-                e.currentTarget.classList.remove('bg-gray-100', 'border-transparent');
-                e.currentTarget.classList.add('bg-primary-pink/10', 'border-primary-pink');
-                e.currentTarget.nextElementSibling.classList.remove('text-gray-500');
-                e.currentTarget.nextElementSibling.classList.add('text-primary-pink');
-
-                const name = e.currentTarget.nextElementSibling.textContent;
-                showMessageBox(name + 'さんの献立リアクション履歴へ遷移します。');
-            });
-        });
-
+        menuBtn.addEventListener('click', toggleDrawer);
+        closeBtn.addEventListener('click', toggleDrawer);
+        overlay.addEventListener('click', toggleDrawer);
     </script>
 </body>
 </html>
