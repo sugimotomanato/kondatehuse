@@ -63,6 +63,11 @@ try {
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
     }
+}else{
+     error_log("無効アクセス: " . $e->getMessage());
+        $_SESSION['error'] = "無効なアクセスです";
+        header('Location: ./U15ADMIN_LOGIN.php');
+        exit();
 }
 ?>
 
