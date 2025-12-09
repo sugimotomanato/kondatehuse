@@ -4,10 +4,11 @@ session_start();// ハッシュを読み込む
 $error = $_SESSION['error'] ?? '';
 unset($_SESSION['error']); // 1回表示したら消す
 if($_SERVER["REQUEST_METHOD"] === "POST"){
-    if($_POST['id'] === 0) {
+    $id = $_POST['id'] ?? '';
+    if($id === 0) {
 
     }else{
-         $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
+     $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
 try{
 
     $pass = trim($_POST['system_password'] ?? '');
@@ -29,7 +30,8 @@ try{
      header("Location: ./U19ADMIN_MAKE.php");
              exit();
     }
-        }
+
+    }
 }else{
      error_log("無効アクセス: " . $e->getMessage());
         $_SESSION['error'] = "無効なアクセスです";
