@@ -89,6 +89,7 @@ body {
 
 <!-- 戻るボタン -->
 <form action="U20.php" method="post">
+    <input type="hidden" name="id" value="0">
     <input type="hidden" name="name" value="<?= htmlspecialchars($name, ENT_QUOTES); ?>">
     <input type="hidden" name="email" value="<?= htmlspecialchars($mail, ENT_QUOTES); ?>">
     <input type="hidden" name="password" value="<?= htmlspecialchars($password, ENT_QUOTES); ?>">
