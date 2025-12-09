@@ -9,8 +9,8 @@ $db_host = 'mysql320.phy.lolipop.lan';   // ロリポップのMySQLホスト
 $db_user = 'LAA1685019';    // データベースユーザー名
 $db_pass = '6group';                     // データベースパスワード
 $db_name = 'LAA1685019-kondatehausu';         // データベース名
- 
-
+$id = $_GET['id'] ?? '';
+if($id ==! 0 ){
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 $ID = trim($_POST['system_ID'] ?? '');
 $pass = trim($_POST['system_password'] ?? '');
@@ -68,6 +68,7 @@ try {
         $_SESSION['error'] = "無効なアクセスです";
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
+}
 }
 ?>
 
