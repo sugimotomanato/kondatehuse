@@ -5,8 +5,8 @@ $error = $_SESSION['error'] ?? '';
 unset($_SESSION['error']); // 1回表示したら消す
 if($_SERVER["REQUEST_METHOD"] === "POST"){
     $id = $_POST['id'] ?? '';
-    if($id === 0) {
-
+    if($id === "0") {
+        
     }else{
      $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
 try{
