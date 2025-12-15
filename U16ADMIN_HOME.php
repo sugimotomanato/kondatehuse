@@ -11,7 +11,9 @@ $db_pass = '6group';                     // データベースパスワード
 $db_name = 'LAA1685019-kondatehausu';         // データベース名
 $id = $_GET['id'] ?? '';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if($id === 0){
+
+}elseif ($_SERVER["REQUEST_METHOD"] === "POST") {
 $ID = trim($_POST['system_ID'] ?? '');
 $pass = trim($_POST['system_password'] ?? '');
 
