@@ -80,11 +80,10 @@ body {
               required></p>
 
     <label for="password">パスワード（半角英数8文字以上）</label>
-    <p><input type="password" name="password" id="password" minlength="8" value="" required></p>
-    <label for="password">パスワード（確認用）</label>
+    <p><input type="password" name="password" id="password" minlength="8" required></p>
     <p><input type="password" name="password_confirm" id="password_confirm"
      placeholder="確認用パスワード" required></p>
-
+    <div class="error" id="error"></div>
     <label for="email">メールアドレス</label>
     <p><input type="email" name="email" id="email"
               value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES); ?>"
