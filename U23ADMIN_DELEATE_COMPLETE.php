@@ -83,6 +83,6 @@ body {
 </head>
 <body>
     <h1>削除完了</h1>
-    <a href="U16ADMIN_HOME.php">戻る</a>
+    <a href="U16ADMIN_HOME.php?id=<?= 0 ?>">戻る</a>
 </body>
 </html>
