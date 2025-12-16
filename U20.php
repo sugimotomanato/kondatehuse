@@ -6,7 +6,7 @@ unset($_SESSION['error']); // 1回表示したら消す
 if($_SERVER["REQUEST_METHOD"] === "POST"){
     $id = $_POST['id'] ?? '';
     if($id === "0") {
-        
+
     }else{
      $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
 try{
@@ -80,9 +80,10 @@ body {
               required></p>
 
     <label for="password">パスワード（半角英数8文字以上）</label>
-    <p><input type="password" name="password" id="password" minlength="8"
-    value="<?= htmlspecialchars($_POST['password'] ?? '', ENT_QUOTES); ?>"
-              required></p>
+    <p><input type="password" name="password" id="password" minlength="8" value="" required></p>
+    <label for="password">パスワード（確認用）</label>
+    <p><input type="password" name="password_confirm" id="password_confirm"
+     placeholder="確認用パスワード" required></p>
 
     <label for="email">メールアドレス</label>
     <p><input type="email" name="email" id="email"
@@ -91,7 +92,23 @@ body {
 
     <button type="submit">確認する</button>
 </form>
+<script>
+function validatePasswords() {
+    const pw1 = document.getElementById('password').value;
+    const pw2 = document.getElementById('password_confirm').value;
+    const errorDiv = document.getElementById('error');
 
+    if (pw1 !== pw2) {
+        errorDiv.textContent = "パスワードが一致しません。";
+        return false; // フォーム送信を止める
+    }
+    if (pw1.length < 8) {
+        errorDiv.textContent = "パスワードは8文字以上必要です。";
+        return false;
+    }
+    return true; // 送信OK
+}
+</script>
 </body>
 </html>
 
