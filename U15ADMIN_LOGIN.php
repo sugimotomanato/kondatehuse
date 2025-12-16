@@ -32,7 +32,7 @@ body {
     <?php if ($error): ?>
         <p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
     <?php endif; ?>
-
+     <h1>献立家(管理者専用)<h1>
     <form action="U16ADMIN_HOME.php" method="post">
        <label for="system_ID">管理者ID</label>
        <p><input type="text" name="system_ID" id="system_ID" required></p>

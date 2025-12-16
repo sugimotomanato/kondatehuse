@@ -94,7 +94,7 @@ body {
       </style>
 </head>
 <body>
-        <h1>献立家</h1>
+     <h1>献立家(管理者専用)<h1>
 <a href="U17ADMIN_DELEATE.php">ユーザ退会処理 ></a>
 
 </body>

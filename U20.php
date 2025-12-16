@@ -69,7 +69,7 @@ body {
         <?php if ($error): ?>
         <p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
     <?php endif; ?>
-
+     <h1>献立家(管理者専用)<h1>
 <h2>管理者登録</h2>
 
 <form action="U21Confirm.php" method="post" onsubmit="return validatePasswords();">
