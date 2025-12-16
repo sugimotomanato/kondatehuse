@@ -72,7 +72,7 @@ body {
 
 <h2>管理者登録</h2>
 
-<form action="U21Confirm.php" method="post">
+<form action="U21Confirm.php" method="post" onsubmit="return validatePasswords();">
 
     <label for="admin-id">管理者名</label>
     <p><input type="text" name="name" id="admin-id"
