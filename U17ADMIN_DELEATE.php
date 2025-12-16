@@ -125,7 +125,7 @@ tr:last-child td {
         <p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
     <?php endif; ?>
 <div class="container">
-         <h1>献立家(管理者専用)<h1>
+         <h1>献立家(管理者専用)</h1>
 <a href="U16ADMIN_HOME.php?id=<?= 0 ?>">戻る</a>
     <!-- 検索ボックス -->
     <div class="search-box">
