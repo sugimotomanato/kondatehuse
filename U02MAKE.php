@@ -1,4 +1,6 @@
 <?php
+// U02MAKE.php
+
 // エラーメッセージを初期化
 $errors = [];
 $code = '';
@@ -7,33 +9,34 @@ $complete_page = 'U03MAKE_LAST.php';
 
 // ==========================================================
 // データベース接続設定
+// ★★★ 修正箇所: ユーザー名とデータベース名が管理画面の情報と一致していることを確認 ★★★
 // ==========================================================
 $db_host = 'mysql320.phy.lolipop.lan';
-$db_user = 'LAA1685019'; 
-$db_pass = '6group'; 
-$db_name = 'LAA1685019-kondatehausu'; 
+$db_user = 'LAA1685019'; // ★正：LAA1685019
+$db_pass = '6group'; // ★正：6group
+$db_name = 'LAA1685019-kondatehausu'; // ★正：LAA1685019-kondatehausu
+// ==========================================================
 
 // フォームがPOST送信された場合の処理
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // 1. データの受け取り
-    $code = $_POST['parent_account'] ?? ''; // 家族コード（作成）
+    $code = $_POST['parent_account'] ?? ''; // 家族コード（フォームフィールド名）
     $confirm_code = $_POST['confirm_parent_account'] ?? ''; // 家族コード（再入力）
     $name = $_POST['user_name'] ?? ''; // 名前
     
-    // NOT NULL制約のある必須項目にダミー値を設定
-    // ★修正箇所: $parent_account, $telephone_number を削除
+    // NOT NULL制約のある必須項目にダミー値を設定 (DB構造 image_8cd527.png に基づく)
     $account_status = 1;
     $favorites = 0; 
     $hert = 0;
-    $icon_path = 'default_icon.png'; // ★新規: icon カラム用のダミー値
+    $icon_path = 'default_icon.png';
     
-    // 2. 入力チェック
+    // 2. 入力チェック (既存のロジックは維持)
     if (empty($code) || strlen($code) < 6 || !ctype_alnum($code)) {
         $errors[] = "家族コードは6文字以上の英数字で入力してください。";
     }
     if (empty($name) || strlen($name) > 50) {
-        $errors[] = "名前を入力してください（50文字以内）。";
+        $errors[] = "名前を入力してくださ(50文字以内)。";
     }
     if ($code !== $confirm_code) {
         $errors[] = "家族コードが一致しません。";
@@ -43,12 +46,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($errors)) {
         try {
             // DB接続
+            // PDO接続文字列が $db_user と $db_pass を使用していることを確認
             $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // 3-1. 家族コード（parent_account）の一意性チェックに修正
-            // ★修正箇所: password_hash から parent_account に変更
-            $stmt = $pdo->prepare("SELECT `parent_account` FROM `parent_account` WHERE `parent_account` = ?");
+            // 3-1. 家族コードの一意性チェック
+            $stmt = $pdo->prepare("SELECT `family_code` FROM `parent_account` WHERE `family_code` = ?");
             $stmt->execute([$code]);
             if ($stmt->fetch()) {
                 $errors[] = "この家族コードは既に使用されています。別のコードを入力してください。";
@@ -56,21 +59,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // 3-2. 登録処理 (テーブル名: parent_account)
             if (empty($errors)) {
-                // ★修正箇所: telephone_number を削除し、icon を追加
-                // (parent_account と password_hash の両方に家族コードを挿入)
-                $sql = "INSERT INTO `parent_account` (`parent_account`, `account_status`, `favorites`, `hert`, `user_name`, `icon`) 
-                        VALUES (?, ?, ?, ?, ?, ?)"; 
+                $sql = "INSERT INTO `parent_account` (`family_code`, `account_status`, `favorites`, `hert`, `user_name`, `icon`) 
+                         VALUES (?, ?, ?, ?, ?, ?)"; 
                 
                 $stmt = $pdo->prepare($sql);
                 
-                // ★修正箇所: execute の引数を7つに修正し、DB構造に合わせる
                 $stmt->execute([
-                    $code,          // 1. parent_account に家族コード       
-                    $account_status,// 3. account_status
-                    $favorites,     // 4. favorites
-                    $hert,          // 5. hert
-                    $name,          // 6. user_name に名前
-                    $icon_path      // 7. icon
+                    $code,          // 1. family_code に家族コード
+                    $account_status,// 2. account_status
+                    $favorites,     // 3. favorites
+                    $hert,          // 4. hert
+                    $name,          // 5. user_name に名前
+                    $icon_path      // 6. icon
                 ]);
                 
                 // 4. 登録成功！完了画面へリダイレクト
@@ -79,8 +79,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
         } catch (PDOException $e) {
-            // SQLエラーが発生した場合
-            $errors[] = "データベースエラーが発生しました: " . $e->getMessage();
+            // 接続エラーまたはSQLエラー
+            $errors[] = "データベースエラーが発生しました: " . htmlspecialchars($e->getMessage());
+            error_log("DBエラー in U02MAKE: " . $e->getMessage());
         }
     }
 }
@@ -93,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>家族コード発行</title>
     <style>
-        /* スタイルシートは前回のコードから省略せずにそのまま含めてください */
+        /* スタイルシート省略 */
         body { 
             font-family: sans-serif; 
             text-align: center; 
@@ -154,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
 
             <form method="post" action="U02MAKE.php">
-                <label for="parent_account">家族コードを作成（6文字英数以上）</label>
+                <label for="parent_account">家族コードを作成  6文字英数以上</label>
                 <input type="text" id="parent_account" name="parent_account" 
                         value="<?php echo htmlspecialchars($code); ?>" 
                         placeholder="コード作成入力" required minlength="6" pattern="[a-zA-Z0-9]+">
