@@ -40,7 +40,7 @@ try {
                     header('Location: ./U20.php');
                     exit();
             }
-         
+         $id=0;
 
 
  
@@ -79,7 +79,7 @@ body {
       </style>
 </head>
 <body>
-
+     <h1>献立家(管理者専用)</h1>
 <h2>入力内容の確認</h2>
 
 
@@ -89,6 +89,7 @@ body {
 
 <!-- 戻るボタン -->
 <form action="U20.php" method="post">
+    <input type="hidden" name="id" value="<?= htmlspecialchars($id, ENT_QUOTES); ?>">
     <input type="hidden" name="name" value="<?= htmlspecialchars($name, ENT_QUOTES); ?>">
     <input type="hidden" name="email" value="<?= htmlspecialchars($mail, ENT_QUOTES); ?>">
     <input type="hidden" name="password" value="<?= htmlspecialchars($password, ENT_QUOTES); ?>">

@@ -274,9 +274,6 @@ $mysqli->close();
         <div class="link">
             <a href="U02MAKE.php">未登録の方はこちら</a>
         </div>
-        <div class="admin-link">
-            <a href="U15ADMIN_LOGIN.php">管理者用ページ</a>
-        </div>
     </div>
 </body>
 </html>

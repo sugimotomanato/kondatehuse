@@ -9,9 +9,11 @@ $db_host = 'mysql320.phy.lolipop.lan';   // ロリポップのMySQLホスト
 $db_user = 'LAA1685019';    // データベースユーザー名
 $db_pass = '6group';                     // データベースパスワード
 $db_name = 'LAA1685019-kondatehausu';         // データベース名
- 
+$id = $_GET['id'] ?? '';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if($id === "0"){
+
+}elseif ($_SERVER["REQUEST_METHOD"] === "POST") {
 $ID = trim($_POST['system_ID'] ?? '');
 $pass = trim($_POST['system_password'] ?? '');
 
@@ -69,6 +71,7 @@ try {
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -76,7 +79,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>管理者ホーム</title>
     <style>
 body {
     margin: 0;
@@ -91,7 +94,7 @@ body {
       </style>
 </head>
 <body>
-        <h1>献立家</h1>
+     <h1>献立家(管理者専用)</h1>
 <a href="U17ADMIN_DELEATE.php">ユーザ退会処理 ></a>
 
 </body>

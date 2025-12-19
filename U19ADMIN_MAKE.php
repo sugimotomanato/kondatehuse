@@ -8,7 +8,7 @@ unset($_SESSION['error']); // 1回表示したら消す
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>管理者新規作成認証</title>
     <style>
         body {
     margin: 0;
@@ -35,7 +35,7 @@ unset($_SESSION['error']); // 1回表示したら消す
         <h1>管理者専用パスワードを入力してください</h1>
 
             <form action="U20.php" method="post">
-        <input type="password" name="system_password" id="">
+        <input type="password" name="system_password" required>
         <button type="submit">次へ</button>
     </form>
 </form>

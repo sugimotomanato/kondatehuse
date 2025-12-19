@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ユーザー削除完了</title>
         <style>
 body {
     margin: 0;
@@ -83,6 +83,6 @@ body {
 </head>
 <body>
     <h1>削除完了</h1>
-    <a href="U16ADMIN_HOME.php">戻る</a>
+    <a href="U16ADMIN_HOME.php?id=<?= 0 ?>">戻る</a>
 </body>
 </html>

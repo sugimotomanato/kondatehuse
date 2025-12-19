@@ -3,9 +3,12 @@ ob_start();
 session_start();// ハッシュを読み込む
 $error = $_SESSION['error'] ?? '';
 unset($_SESSION['error']); // 1回表示したら消す
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+    $id = $_POST['id'] ?? '';
+    if($id === "0") {
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
- $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
+    }else{
+     $hash=   password_hash("aso230", PASSWORD_DEFAULT);//ここに保存
 try{
 
     $pass = trim($_POST['system_password'] ?? '');
@@ -27,13 +30,14 @@ try{
      header("Location: ./U19ADMIN_MAKE.php");
              exit();
     }
+
+    }
 }else{
      error_log("無効アクセス: " . $e->getMessage());
         $_SESSION['error'] = "無効なアクセスです";
         header('Location: ./U15ADMIN_LOGIN.php');
         exit();
 }
-
 ?>
 
 
@@ -65,10 +69,10 @@ body {
         <?php if ($error): ?>
         <p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
     <?php endif; ?>
-
+     <h1>献立家(管理者専用)</h1>
 <h2>管理者登録</h2>
 
-<form action="U21Confirm.php" method="post">
+<form action="U21Confirm.php" method="post" onsubmit="return validatePasswords();">
 
     <label for="admin-id">管理者名</label>
     <p><input type="text" name="name" id="admin-id"
@@ -76,10 +80,10 @@ body {
               required></p>
 
     <label for="password">パスワード（半角英数8文字以上）</label>
-    <p><input type="password" name="password" id="password" minlength="8"
-    value="<?= htmlspecialchars($_POST['password'] ?? '', ENT_QUOTES); ?>"
-              required></p>
-
+    <p><input type="password" name="password" id="password" minlength="8" required></p>
+    <p><input type="password" name="password_confirm" id="password_confirm"
+     placeholder="確認用パスワード" required></p>
+    <div class="error" id="error"></div>
     <label for="email">メールアドレス</label>
     <p><input type="email" name="email" id="email"
               value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES); ?>"
@@ -87,7 +91,23 @@ body {
 
     <button type="submit">確認する</button>
 </form>
+<script>
+function validatePasswords() {
+    const pw1 = document.getElementById('password').value;
+    const pw2 = document.getElementById('password_confirm').value;
+    const errorDiv = document.getElementById('error');
 
+    if (pw1 !== pw2) {
+        errorDiv.textContent = "パスワードが一致しません。";
+        return false; // フォーム送信を止める
+    }
+    if (pw1.length < 8) {
+        errorDiv.textContent = "パスワードは8文字以上必要です。";
+        return false;
+    }
+    return true; // 送信OK
+}
+</script>
 </body>
 </html>
 
